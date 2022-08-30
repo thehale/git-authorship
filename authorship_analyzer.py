@@ -134,7 +134,14 @@ modules = analyzer.flatten()
 ids = [module.name for module in modules]
 labels = [i.split("/")[-1] for i in ids]
 parents = [module.parent for module in modules]
-values = [1 for module in modules]
+values = [sum(module.authorship().values()) for module in modules]
+
+def authorship_str(module: ModuleAnalyzer) -> str:
+    authors = module.authorship()
+    return "<br>Authors:<br> - " + "<br> - ".join(
+        f"{author}: {lines}" for author, lines in authors.items()
+    )
+
 
 fig = go.Figure(
     go.Treemap(
@@ -142,7 +149,10 @@ fig = go.Figure(
         labels=labels,
         parents=parents,
         values=values,
-        maxdepth=3,
+        maxdepth=2,
+        branchvalues="total",
+        text=[authorship_str(module) for module in modules],
+        hovertemplate="%{label}<br><br>%{value} lines<br>%{text}",
         root_color="lightgrey",
     )
 )

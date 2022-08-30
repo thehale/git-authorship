@@ -221,6 +221,17 @@ docs = ["furo (>=2021.7.5b38)", "proselint (>=0.10.2)", "sphinx-autodoc-typehint
 test = ["appdirs (==1.4.4)", "pytest-cov (>=2.7)", "pytest-mock (>=3.6)", "pytest (>=6)"]
 
 [[package]]
+name = "plotly"
+version = "5.10.0"
+description = "An open-source, interactive data visualization library for Python"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+tenacity = ">=6.2.0"
+
+[[package]]
 name = "pygments"
 version = "2.13.0"
 description = "Pygments is a syntax highlighting package written in Python."
@@ -297,6 +308,17 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
+name = "tenacity"
+version = "8.0.1"
+description = "Retry code until it succeeds"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.extras]
+doc = ["reno", "sphinx", "tornado (>=4.5)"]
+
+[[package]]
 name = "tomli"
 version = "2.0.1"
 description = "A lil' TOML parser"
@@ -343,7 +365,7 @@ bracex = ">=2.1.1"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "2db58610955efb5bc91fd9f79730d7b2036eda7600678f0de2f1825566e47763"
+content-hash = "3ebd0e837634fd6bbe7bc1ed58cb800d0667a023427fda0bb29339a330d8ab1c"
 
 [metadata.files]
 black = []
@@ -364,6 +386,7 @@ packaging = []
 pathspec = []
 pillow = []
 platformdirs = []
+plotly = []
 pygments = []
 pyparsing = []
 python-dateutil = []
@@ -371,6 +394,7 @@ scipy = []
 setuptools-scm = []
 six = []
 smmap = []
+tenacity = []
 tomli = []
 tqdm = []
 typing-extensions = []
