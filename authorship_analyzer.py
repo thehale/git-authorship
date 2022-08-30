@@ -80,6 +80,12 @@ class ModuleAnalyzer:
                 authors[author] = authors.get(author, 0) + lines
         return authors
 
+    def flatten(self):
+        flat = [self]
+        for submodule in self.submodules:
+            flat += submodule.flatten()
+        return flat
+
 
 class FileModuleAnalyzer(ModuleAnalyzer):
     def authorship(self):
@@ -98,11 +104,11 @@ def raw_blame_to_module_analyzer(
         parent_name,
         [
             *[
-                FileModuleAnalyzer(file_name, parent_name).with_blame(blame)
+                FileModuleAnalyzer(f"{module_name}/{file_name}", module_name).with_blame(blame)
                 for file_name, blame in raw_blame["files"].items()
             ],
             *[
-                raw_blame_to_module_analyzer(dirname, module_name, dirblame)
+                raw_blame_to_module_analyzer(f"{module_name}/{dirname}", module_name, dirblame)
                 for dirname, dirblame in raw_blame["dirs"].items()
             ],
         ],
@@ -113,6 +119,27 @@ def raw_blame_to_module_analyzer(
 
 
 blame = repo_blame()
-analyzer = raw_blame_to_module_analyzer("cubing.js", "", blame)
+analyzer = raw_blame_to_module_analyzer("/cubing.js", "", blame)
 stats = analyzer.authorship()
 print(stats)
+
+#####################################
+import plotly.graph_objects as go
+
+modules = analyzer.flatten()
+labels = [module.name for module in modules]
+parents = [module.parent for module in modules]
+values = [1 for module in modules]
+
+fig = go.Figure(
+    go.Treemap(
+        labels=labels,
+        parents=parents,
+        values=values,
+        maxdepth=3,
+        root_color="lightgrey",
+    )
+)
+
+fig.update_layout(margin=dict(t=50, l=25, r=25, b=25))
+fig.show()
