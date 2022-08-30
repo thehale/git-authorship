@@ -5,7 +5,7 @@ _CACHED_BLAME_FILE = "./blame.json"
 
 import json
 import os
-from typing import Dict
+from typing import Dict, List
 from git import Repo
 
 
@@ -59,15 +59,24 @@ def repo_blame():
 class ModuleAnalyzer:
     name: str
     parent: str
-    blame: Dict[str, "ModuleAnalyzer"]
+    blame: List
+    submodules: List["ModuleAnalyzer"]
 
-    def __init__(self, blame: Dict[str, "ModuleAnalyzer"]):
+    def __init__(
+        self, name: str, parent: str, submodules: List["ModuleAnalyzer"] = None
+    ):
+        self.name = name
+        self.parent = parent
+        self.submodules = submodules or []
+
+    def with_blame(self, blame) -> "ModuleAnalyzer":
         self.blame = blame
+        return self
 
     def authorship(self):
         authors = {}
-        for submodule in self.blame.keys():
-            for author, lines in self.blame[submodule].authorship().items():
+        for submodule in self.submodules:
+            for author, lines in submodule.authorship().items():
                 authors[author] = authors.get(author, 0) + lines
         return authors
 
@@ -81,29 +90,29 @@ class FileModuleAnalyzer(ModuleAnalyzer):
         return authors
 
 
-def raw_blame_to_module_analyzer(raw_blame: Dict[str, Dict]) -> ModuleAnalyzer:
+def raw_blame_to_module_analyzer(
+    module_name: str, parent_name: str, raw_blame: Dict[str, Dict]
+) -> ModuleAnalyzer:
     return ModuleAnalyzer(
-        {
-            **{
-                submodule: FileModuleAnalyzer(blame)
-                for submodule, blame in raw_blame["files"].items()
-            },
-            **{
-                submodule: raw_blame_to_module_analyzer(blame)
-                for submodule, blame in raw_blame["dirs"].items()
-            },
-        }
+        module_name,
+        parent_name,
+        [
+            *[
+                FileModuleAnalyzer(file_name, parent_name).with_blame(blame)
+                for file_name, blame in raw_blame["files"].items()
+            ],
+            *[
+                raw_blame_to_module_analyzer(dirname, module_name, dirblame)
+                for dirname, dirblame in raw_blame["dirs"].items()
+            ],
+        ],
     )
-
-
-def author_stats(blame):
-    return raw_blame_to_module_analyzer(blame).authorship()
 
 
 #####################################
 
+
 blame = repo_blame()
-analyzer = raw_blame_to_module_analyzer(blame)
+analyzer = raw_blame_to_module_analyzer("cubing.js", "", blame)
 stats = analyzer.authorship()
 print(stats)
-
