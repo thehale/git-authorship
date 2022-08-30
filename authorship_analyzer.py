@@ -123,7 +123,7 @@ def raw_blame_to_module_analyzer(
 
 
 blame = repo_blame()
-analyzer = raw_blame_to_module_analyzer("/cubing.js", "", blame)
+analyzer = raw_blame_to_module_analyzer(GIT_REPO_PATH, "", blame)
 stats = analyzer.authorship()
 print(stats)
 
