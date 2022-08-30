@@ -56,18 +56,54 @@ def repo_blame():
 #####################################
 
 
-def author_stats(blame):
-    NAME = 0  # list idx
-    authors = {}
-    for file_entry in blame["files"].values():
-        for author, lines in file_entry:
-            authors[author[NAME]] = authors.get(author[NAME], 0) + lines
-    for folder in blame["dirs"].keys():
-        for author, lines in author_stats(blame["dirs"][folder]).items():
-            authors[author] = authors.get(author, 0) + lines
-    return authors
+class ModuleAnalyzer:
+    name: str
+    parent: str
+    blame: Dict[str, "ModuleAnalyzer"]
 
+    def __init__(self, blame: Dict[str, "ModuleAnalyzer"]):
+        self.blame = blame
+
+    def authorship(self):
+        authors = {}
+        for submodule in self.blame.keys():
+            for author, lines in self.blame[submodule].authorship().items():
+                authors[author] = authors.get(author, 0) + lines
+        return authors
+
+
+class FileModuleAnalyzer(ModuleAnalyzer):
+    def authorship(self):
+        NAME = 0  # list idx
+        authors = {}
+        for author, lines in self.blame:
+            authors[author[NAME]] = authors.get(author[NAME], 0) + lines
+        return authors
+
+
+def raw_blame_to_module_analyzer(raw_blame: Dict[str, Dict]) -> ModuleAnalyzer:
+    return ModuleAnalyzer(
+        {
+            **{
+                submodule: FileModuleAnalyzer(blame)
+                for submodule, blame in raw_blame["files"].items()
+            },
+            **{
+                submodule: raw_blame_to_module_analyzer(blame)
+                for submodule, blame in raw_blame["dirs"].items()
+            },
+        }
+    )
+
+
+def author_stats(blame):
+    return raw_blame_to_module_analyzer(blame).authorship()
+
+
+#####################################
 
 blame = repo_blame()
-stats = author_stats(blame)
+analyzer = raw_blame_to_module_analyzer(blame)
+stats = analyzer.authorship()
 print(stats)
+
