@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "cubingjs-authors"
+version = "0.1.0"
+description = ""
+authors = ["Joseph Hale <me@jhale.dev>"]
+license = "MPL-2.0"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+GitPython = "^3.1.27"
+
+[tool.poetry.dev-dependencies]
+black = "^22.6.0"
+mypy = "^0.971"
+git-of-theseus = "^0.3.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
