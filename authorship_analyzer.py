@@ -5,7 +5,7 @@ _CACHED_BLAME_FILE = "./blame.json"
 
 import json
 import os
-from typing import Dict, List
+from typing import Dict, List, Optional
 from git import Repo
 
 
@@ -104,11 +104,15 @@ def raw_blame_to_module_analyzer(
         parent_name,
         [
             *[
-                FileModuleAnalyzer(f"{module_name}/{file_name}", module_name).with_blame(blame)
+                FileModuleAnalyzer(
+                    f"{module_name}/{file_name}", module_name
+                ).with_blame(blame)
                 for file_name, blame in raw_blame["files"].items()
             ],
             *[
-                raw_blame_to_module_analyzer(f"{module_name}/{dirname}", module_name, dirblame)
+                raw_blame_to_module_analyzer(
+                    f"{module_name}/{dirname}", module_name, dirblame
+                )
                 for dirname, dirblame in raw_blame["dirs"].items()
             ],
         ],
@@ -127,12 +131,14 @@ print(stats)
 import plotly.graph_objects as go
 
 modules = analyzer.flatten()
-labels = [module.name for module in modules]
+ids = [module.name for module in modules]
+labels = [i.split("/")[-1] for i in ids]
 parents = [module.parent for module in modules]
 values = [1 for module in modules]
 
 fig = go.Figure(
     go.Treemap(
+        ids=ids,
         labels=labels,
         parents=parents,
         values=values,
