@@ -2,10 +2,8 @@ vendor/comlink-everywhere|Google Inc.|support@google.com|Apache-2.0
 vendor/cstimer|Chen Shuang|cs0x7f@gmail.com|GPL-3.0-or-later
 vendor/min2phase|Chen Shuang|cs0x7f@gmail.com|GPL-3.0-or-later
 vendor/p-lazy|Sindre Sorhus|sindresorhus@gmail.com|MIT
-vendor/random-uint-below|???|???|???
 vendor/sq12phase|Chen Shuang|cs0x7f@gmail.com|GPL-3.0-or-later
 vendor/three|mrdoob|info@mrdoob.com|MIT
-vendor/unsafe-raw-aes|???|???|???
 vendor/xyzzy/fto-solver-original.js|xyzzy|torchlight@users.noreply.github.com|MIT
 vendor/xyzzy/fto-solver.js|xyzzy|torchlight@users.noreply.github.com|MIT
 vendor/xyzzy/kilosolver.js|xyzzy|torchlight@users.noreply.github.com|MIT
