@@ -8,6 +8,7 @@ GIT_REPO_PATH = "./cubing.js"
 EXCLUDE_DIRS = [".git"]
 
 _CACHED_BLAME_FILE = "./blame.json"
+
 _AUTHORSHIP_OVERRIDES_FILE = "./authorship-overrides.txt"
 _AUTHORSHIP_OVERRIDES_CACHE = {}
 if os.path.exists(_AUTHORSHIP_OVERRIDES_FILE):
@@ -20,6 +21,13 @@ if os.path.exists(_AUTHORSHIP_OVERRIDES_FILE):
                 "license": license,
             }
 
+_AUTHOR_LICENSE_FILE = "./author-licenses.txt"
+_AUTHOR_LICENSE_CACHE = {}
+if os.path.exists(_AUTHOR_LICENSE_FILE):
+    with open(_AUTHOR_LICENSE_FILE) as f:
+        for line in f:
+            author, license = line.strip().split("|")
+            _AUTHOR_LICENSE_CACHE[author] = license
 
 repo = Repo(GIT_REPO_PATH)
 
@@ -92,6 +100,13 @@ class ModuleAnalyzer:
                 authors[author] = authors.get(author, 0) + lines
         return authors
 
+    def licensing(self):
+        licenses = {}
+        for submodule in self.submodules:
+            for license, lines in submodule.licensing().items():
+                licenses[license] = licenses.get(license, 0) + lines
+        return licenses
+
     def flatten(self):
         flat = [self]
         for submodule in self.submodules:
@@ -112,6 +127,22 @@ class FileModuleAnalyzer(ModuleAnalyzer):
         for override_path, override in _AUTHORSHIP_OVERRIDES_CACHE.items():
             if override_path in self.name:
                 return override["author"]
+        return None
+
+    def licensing(self):
+        NAME = 0  # list idx
+        licenses = {}
+        for author, lines in self.blame:
+            license = self.__license_override() or _AUTHOR_LICENSE_CACHE.get(
+                author[NAME], "???"
+            )
+            licenses[license] = licenses.get(license, 0) + lines
+        return licenses
+
+    def __license_override(self) -> Optional[str]:
+        for override_path, override in _AUTHORSHIP_OVERRIDES_CACHE.items():
+            if override_path in self.name:
+                return override["license"]
         return None
 
 
@@ -146,7 +177,10 @@ analyzer = raw_blame_to_module_analyzer(GIT_REPO_PATH, "", blame)
 stats = analyzer.authorship()
 print(stats)
 
+
 #####################################
+
+
 import plotly.graph_objects as go
 
 modules = analyzer.flatten()
@@ -162,6 +196,15 @@ def authorship_str(module: ModuleAnalyzer) -> str:
         f"{author}: {lines}" for author, lines in authors.items()
     )
 
+def licensing_str(module: ModuleAnalyzer) -> str:
+    licenses = module.licensing()
+    return "<br>Licenses:<br> - " + "<br> - ".join(
+        f"{license}: {lines}" for license, lines in licenses.items()
+    )
+
+def info_str(module: ModuleAnalyzer) -> str:
+    return f"{authorship_str(module)}<br>{licensing_str(module)}"
+
 
 fig = go.Figure(
     go.Treemap(
@@ -171,7 +214,7 @@ fig = go.Figure(
         values=values,
         maxdepth=2,
         branchvalues="total",
-        text=[authorship_str(module) for module in modules],
+        text=[info_str(module) for module in modules],
         hovertemplate="%{label}<br><br>%{value} lines<br>%{text}",
         root_color="lightgrey",
     )
