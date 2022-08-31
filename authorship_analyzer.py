@@ -1,12 +1,24 @@
-GIT_REPO_PATH = "./cubing.js"
-EXCLUDE_DIRS = [".git"]
-
-_CACHED_BLAME_FILE = "./blame.json"
-
 import json
 import os
 from typing import Dict, List, Optional
 from git import Repo
+
+
+GIT_REPO_PATH = "./cubing.js"
+EXCLUDE_DIRS = [".git"]
+
+_CACHED_BLAME_FILE = "./blame.json"
+_AUTHORSHIP_OVERRIDES_FILE = "./authorship-overrides.txt"
+_AUTHORSHIP_OVERRIDES_CACHE = {}
+if os.path.exists(_AUTHORSHIP_OVERRIDES_FILE):
+    with open(_AUTHORSHIP_OVERRIDES_FILE) as f:
+        for line in f:
+            module, author, email, license = line.strip().split("|")
+            _AUTHORSHIP_OVERRIDES_CACHE[module] = {
+                "author": author,
+                "email": email,
+                "license": license,
+            }
 
 
 repo = Repo(GIT_REPO_PATH)
@@ -92,8 +104,15 @@ class FileModuleAnalyzer(ModuleAnalyzer):
         NAME = 0  # list idx
         authors = {}
         for author, lines in self.blame:
-            authors[author[NAME]] = authors.get(author[NAME], 0) + lines
+            name = self.__author_override() or author[NAME]
+            authors[name] = authors.get(name, 0) + lines
         return authors
+
+    def __author_override(self) -> Optional[str]:
+        for override_path, override in _AUTHORSHIP_OVERRIDES_CACHE.items():
+            if override_path in self.name:
+                return override["author"]
+        return None
 
 
 def raw_blame_to_module_analyzer(
@@ -135,6 +154,7 @@ ids = [module.name for module in modules]
 labels = [i.split("/")[-1] for i in ids]
 parents = [module.parent for module in modules]
 values = [sum(module.authorship().values()) for module in modules]
+
 
 def authorship_str(module: ModuleAnalyzer) -> str:
     authors = module.authorship()
