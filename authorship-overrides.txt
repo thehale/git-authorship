@@ -7,5 +7,5 @@ vendor/three|mrdoob|info@mrdoob.com|MIT
 vendor/xyzzy/fto-solver-original.js|xyzzy|torchlight@users.noreply.github.com|MIT
 vendor/xyzzy/fto-solver.js|xyzzy|torchlight@users.noreply.github.com|MIT
 vendor/xyzzy/kilosolver.js|xyzzy|torchlight@users.noreply.github.com|MIT
-vendor/xyzzy/master_tetraminx-solver.js|xyzzy|torchlight@users.noreply.github.com|GPL-3.0-or-later
-vendor/xyzzy/redi_cube.js|xyzzy|torchlight@users.noreply.github.com|GPL-3.0-or-later
+vendor/xyzzy/master_tetraminx-solver.js|xyzzy|torchlight@users.noreply.github.com|MIT
+vendor/xyzzy/redi_cube.js|xyzzy|torchlight@users.noreply.github.com|MIT
