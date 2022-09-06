@@ -1,0 +1,31 @@
+{
+    // How to build the devcontainer
+    "build": {
+        "dockerfile": "Dockerfile",
+        "args": {
+            // Source: https://code.visualstudio.com/docs/remote/devcontainerjson-reference#_variables-in-devcontainerjson
+            "PROJECT_FOLDER_NAME": "${containerWorkspaceFolderBasename}"
+        },
+        "context": ".."
+    },
+    "postCreateCommand": "poetry install && pre-commit install",
+
+    // VS Code tooling and settings to include automatically.
+    "extensions": [
+        "ms-python.python", // Python Intellisense/Debugging
+        "njpwerner.autodocstring", // Easily create docstrings
+        "mhutchie.git-graph", // Nice Git Log Visualizer
+        "stkb.rewrap", // Easily line-wrap comments at the ruler(s) below.
+        "ymotongpoo.licenser" // Auto-insert license headers
+    ],
+    "settings": {
+        "licenser.author": "Joseph Hale",
+        "licenser.license": "MPLv2",
+        "licenser.projectName": "Authorship",
+        "[python]": {
+            "editor.rulers": [88], // `black`'s default line width
+            "editor.insertSpaces": true,
+            "editor.tabSize": 4
+        }
+    }
+}
