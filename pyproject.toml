@@ -1,5 +1,11 @@
+# Copyright (c) 2022 Joseph Hale
+# 
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
 [tool.poetry]
-name = "cubingjs-authors"
+name = "git-authorship"
 version = "0.1.0"
 description = ""
 authors = ["Joseph Hale <me@jhale.dev>"]
@@ -9,6 +15,7 @@ license = "MPL-2.0"
 python = "^3.8"
 GitPython = "^3.1.27"
 plotly = "^5.10.0"
+gitpython = {git = "https://github.com/gitpython-developers/GitPython", rev = "bec6157"}
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.6.0"

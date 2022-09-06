@@ -111,9 +111,16 @@ description = "GitPython is a python library used to interact with Git repositor
 category = "main"
 optional = false
 python-versions = ">=3.7"
+develop = false
 
 [package.dependencies]
 gitdb = ">=4.0.1,<5"
+
+[package.source]
+type = "git"
+url = "https://github.com/gitpython-developers/GitPython"
+reference = "bec6157"
+resolved_reference = "bec61576ae75803bc4e60d8de7a629c194313d1c"
 
 [[package]]
 name = "identify"
@@ -389,7 +396,7 @@ testing = ["coverage (>=6.2)", "coverage-enable-subprocess (>=1)", "flaky (>=3.7
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "ff5a341c68eba4779356e4dfc5779865829848007aeebefe559b92288bee1c22"
+content-hash = "f49701453f259eb10592579cb36eec7fe09cbe1d5a7967e4a2e35ce421b3ce8e"
 
 [metadata.files]
 attrs = [
@@ -449,10 +456,7 @@ gitdb = [
     {file = "gitdb-4.0.9-py3-none-any.whl", hash = "sha256:8033ad4e853066ba6ca92050b9df2f89301b8fc8bf7e9324d412a63f8bf1a8fd"},
     {file = "gitdb-4.0.9.tar.gz", hash = "sha256:bac2fd45c0a1c9cf619e63a90d62bdc63892ef92387424b855792a6cabe789aa"},
 ]
-GitPython = [
-    {file = "GitPython-3.1.27-py3-none-any.whl", hash = "sha256:5b68b000463593e05ff2b261acff0ff0972df8ab1b70d3cdbd41b546c8b8fc3d"},
-    {file = "GitPython-3.1.27.tar.gz", hash = "sha256:1c885ce809e8ba2d88a29befeb385fcea06338d3640712b59ca623c220bb5704"},
-]
+GitPython = []
 identify = [
     {file = "identify-2.5.5-py2.py3-none-any.whl", hash = "sha256:ef78c0d96098a3b5fe7720be4a97e73f439af7cf088ebf47b620aeaa10fadf97"},
     {file = "identify-2.5.5.tar.gz", hash = "sha256:322a5699daecf7c6fd60e68852f36f2ecbb6a36ff6e6e973e0d2bb6fca203ee6"},
