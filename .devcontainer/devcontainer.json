@@ -13,6 +13,7 @@
     // VS Code tooling and settings to include automatically.
     "extensions": [
         "ms-python.python", // Python Intellisense/Debugging
+        "ritwickdey.LiveServer", // Right click to open web pages
         "njpwerner.autodocstring", // Easily create docstrings
         "mhutchie.git-graph", // Nice Git Log Visualizer
         "stkb.rewrap", // Easily line-wrap comments at the ruler(s) below.
