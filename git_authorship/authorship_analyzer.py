@@ -49,8 +49,9 @@ def _get_git_repo_path(base_path: str):
 
 # Internal Configuration
 _GIT_REPO_PATH = _get_git_repo_path(GIT_REPO_BASE_PATH)
-_BUILT_BLAME_FILE = "./build/blame.json"
-_BUILT_HTML_FILE = "./build/authorship.html"
+_BUILT_PATH = "./build"
+_BUILT_BLAME_FILE = f"{_BUILT_PATH}/blame.json"
+_BUILT_HTML_FILE = f"{_BUILT_PATH}/authorship.html"
 _PSEUDONYMS_CACHE = _load_pseudonyms(PSEUDONYMS_FILE)
 _AUTHOR_LICENSE_CACHE = _load_author_licenses(AUTHOR_LICENSE_FILE)
 
@@ -89,11 +90,14 @@ def folder_blame(path: str) -> Dict:
 
 
 def repo_blame():
+    from pathlib import Path
+
     if os.path.exists(_BUILT_BLAME_FILE):
         with open(_BUILT_BLAME_FILE) as f:
             return json.load(f)
     else:
         blame = folder_blame(_GIT_REPO_PATH)
+        Path(_BUILT_PATH).mkdir(parents=True, exist_ok=True)
         with open(_BUILT_BLAME_FILE, "w") as f:
             json.dump(blame, f)
     return blame
