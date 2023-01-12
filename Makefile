@@ -4,6 +4,9 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+run:
+	python ./git_authorship/authorship_analyzer.py
+
 license-check:
 	poetry export --format=requirements.txt --output=requirements.txt
 	poetry run liccheck

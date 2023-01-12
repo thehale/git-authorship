@@ -39,7 +39,7 @@ files for labelling the licenses under which contributors have shared their code
    [devcontainer](https://code.visualstudio.com/docs/remote/containers).
 2. Clone the repository you wish to analyze into the included `repo` folder.
 3. Make copies of the files in the `config` folder without the `dist` extension.
-4. Run the analyzer with `python ./git_authorship/authorship_analyzer.py`
+4. Run the analyzer with `make run`
     - The first run will take a while as it computes an accurate `git blame` for
       every file in your repository. At the end of the run, a cached blame file
       will be generated in the `build` directory to speed up future runs.
