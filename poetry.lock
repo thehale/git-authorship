@@ -339,14 +339,14 @@ test = ["appdirs (==1.4.4)", "covdefaults (>=2.2.2)", "pytest (>=7.2)", "pytest-
 
 [[package]]
 name = "plotly"
-version = "5.11.0"
+version = "5.13.0"
 description = "An open-source, interactive data visualization library for Python"
 category = "main"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "plotly-5.11.0-py2.py3-none-any.whl", hash = "sha256:52fd74b08aa4fd5a55b9d3034a30dbb746e572d7ed84897422f927fdf687ea5f"},
-    {file = "plotly-5.11.0.tar.gz", hash = "sha256:4efef479c2ec1d86dcdac8405b6ca70ca65649a77408e39a7e84a1ea2db6c787"},
+    {file = "plotly-5.13.0-py2.py3-none-any.whl", hash = "sha256:4ac5db72176ce144f1fcde8d1ef7bdbccf5bb7a53e3d366b16fcd7c85319fdfd"},
+    {file = "plotly-5.13.0.tar.gz", hash = "sha256:81a3aae4021d5ab91790fc71c3433791f41bfc71586e857f7777f429a955039a"},
 ]
 
 [package.dependencies]
@@ -581,4 +581,4 @@ testing = ["coverage (>=6.2)", "coverage-enable-subprocess (>=1)", "flaky (>=3.7
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "f92ea4810167a7e392dffbf48dbfbcae0382aeeaea356f8c92b1c95ecc9333ef"
+content-hash = "3c5f5e2c7da4b331f6a8df66935765d4e22b7097bd319cd76ad3f34a93fb08f5"
