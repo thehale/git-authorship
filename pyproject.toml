@@ -20,7 +20,7 @@ plotly = "^5.15.0"
 black = "^23.1.0"
 mypy = "^1.4"
 pre-commit = "^3.3.3"
-pytest = "^7.3.2"
+pytest = "^7.4.0"
 liccheck = "^0.9.1"
 
 [tool.liccheck]
