@@ -18,7 +18,7 @@ plotly = "^5.15.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.7.0"
-mypy = "^1.4"
+mypy = "^1.5"
 pre-commit = "^3.3.3"
 pytest = "^7.4.0"
 liccheck = "^0.9.1"
