@@ -13,7 +13,7 @@ license = "MPL-2.0"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-GitPython = "^3.1.34"
+GitPython = "^3.1.35"
 plotly = "^5.16.1"
 
 [tool.poetry.group.dev.dependencies]
