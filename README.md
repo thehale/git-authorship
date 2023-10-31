@@ -15,7 +15,7 @@ Interactive reports showing who wrote each line of code in your git repository.
 <!-- BADGES -->
 [![](https://badgen.net/github/license/thehale/git-authorship)](https://github.com/thehale/git-authorship/blob/master/LICENSE)
 [![](https://badgen.net/badge/icon/Sponsor/pink?icon=github&label)](https://github.com/sponsors/thehale)
-[![](https://badgen.net/badge/icon/Follow%20@jhaledev/1DA1F2?icon=twitter&label)](https://twitter.com/intent/user?screen_name=jhaledev)
+[![](https://img.shields.io/badge/LinkedIn-thehale-0A66C2?logo=linkedin)](https://linkedin.com/in/thehale)
 
 ![GIF demonstrating an interactive report of the authors of the cubing library
 cubing.js](./docs/git-authorship-demo-cubingjs.gif)
