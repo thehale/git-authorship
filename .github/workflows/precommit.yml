@@ -21,3 +21,17 @@ jobs:
       - uses: pre-commit/action@v3.0.0
       - uses: pre-commit-ci/lite-action@v1.0.1
         if: always()
+
+  # Remove the maintenance burden for required status checks.
+  # https://github.com/marketplace/actions/alls-green#why
+  all-green:
+    if: always()
+    needs:
+     - main
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ensure all other jobs pass successfully.
+        uses: re-actors/alls-green@release/v1
+        with:
+          jobs: ${{ toJSON(needs) }}
