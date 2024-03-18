@@ -14,7 +14,7 @@ license = "MPL-2.0"
 [tool.poetry.dependencies]
 python = "^3.8"
 GitPython = "^3.1.42"
-plotly = "^5.19.0"
+plotly = "^5.20.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.2.0"
