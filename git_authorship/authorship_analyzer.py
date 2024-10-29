@@ -113,7 +113,10 @@ class ModuleAnalyzer:
     submodules: List["ModuleAnalyzer"]
 
     def __init__(
-        self, name: str, parent: str, submodules: List["ModuleAnalyzer"] = None
+        self,
+        name: str,
+        parent: str,
+        submodules: Optional[List["ModuleAnalyzer"]] = None,
     ):
         self.name = name
         self.parent = parent
