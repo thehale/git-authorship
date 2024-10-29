@@ -41,11 +41,24 @@ files for labelling the licenses under which contributors have shared their code
 
 ## Quickstart
 
-1. Clone this repository and open it in the included
-   [devcontainer](https://code.visualstudio.com/docs/remote/containers).
-2. Clone the repository you wish to analyze into the included `repo` folder.
-3. Make copies of the files in the `config` folder without the `dist` extension.
-4. Run the analyzer with `make run`
+1. Clone this repository: `git clone https://github.com/thehale/git-authorship`
+2. Install [Python Poetry](https://python-poetry.org/docs/#installing-with-the-official-installer)
+    
+    ```
+    curl -sSL https://install.python-poetry.org | python3 -
+    ```
+
+3. Create a virtual environment and install dependencies
+     
+     ```
+     poetry config virtualenvs.in-project true
+     poetry shell
+     poetry install
+     ```
+     
+4. Clone the repository you wish to analyze into the included `repo` folder.
+5. Make copies of the files in the `config` folder without the `dist` extension.
+6. Run the analyzer with `make run`
     - The first run will take a while as it computes an accurate `git blame` for
       every file in your repository. At the end of the run, a cached blame file
       will be generated in the `build` directory to speed up future runs.
