@@ -57,7 +57,7 @@ files for labelling the licenses under which contributors have shared their code
      ```
      
 4. Clone the repository you wish to analyze into the included `repo` folder.
-5. Make copies of the files in the `config` folder without the `dist` extension.
+5. [Optional] Make copies of the files in the `config` folder without the `dist` extension.
 6. Run the analyzer with `make run`
     - The first run will take a while as it computes an accurate `git blame` for
       every file in your repository. At the end of the run, a cached blame file
