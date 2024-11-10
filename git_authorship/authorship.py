@@ -3,6 +3,7 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
+import logging
 from collections import defaultdict
 from pathlib import Path
 
@@ -14,8 +15,11 @@ from ._types import RepoAuthorship
 
 EXCLUDE_DIRS = [".git"]
 
+log = logging.getLogger(__name__)
+
 
 def for_file(repo: Repo, path: Path) -> Authorship:
+    log.info(f"Blaming {path}")
     raw_blame = repo.blame("HEAD", str(path), rev_opts=["-M", "-C", "-C", "-C"])
     blame = [
         (f"{commit.author.name} <{commit.author.email}>", len(lines))
