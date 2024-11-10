@@ -28,8 +28,7 @@ git-authorship https://github.com/USERNAME/REPOSITORY
 ```
 <div align="center">
 
-![GIF demonstrating an interactive report of the authors of the cubing library
-cubing.js](https://github.com/thehale/git-authorship/blob/master/docs/git-authorship-demo-cubingjs.gif?raw=true)
+![](https://github.com/thehale/git-authorship/blob/master/docs/git-authorship-demo-cubingjs.gif?raw=true)
 
 </div>
 

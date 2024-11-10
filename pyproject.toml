@@ -6,7 +6,7 @@
 
 [tool.poetry]
 name = "git-authorship"
-version = "0.1.3"
+version = "0.1.4"
 description = "Interactive reports showing who wrote each line of code in your git repository."
 authors = ["Joseph Hale <me@jhale.dev>"]
 license = "MPL-2.0"
