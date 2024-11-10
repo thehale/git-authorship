@@ -56,13 +56,11 @@ files for labelling the licenses under which contributors have shared their code
      poetry install
      ```
      
-4. Clone the repository you wish to analyze into the included `repo` folder.
-5. [Optional] Make copies of the files in the `config` folder without the `dist` extension.
-6. Run the analyzer with `make run`
-    - The first run will take a while as it computes an accurate `git blame` for
-      every file in your repository. At the end of the run, a cached blame file
-      will be generated in the `build` directory to speed up future runs.
+4. Run `python ./git_authorship REPO_URL` 
+   - Generates a treemap at `authorship.html`
+   - AND Generates a JSON output at `authorship.json`
 
+<!-- 
 ## Other Features
 
 ### Author Licenses
@@ -96,7 +94,7 @@ All files with a file path containing `target-path` as a substring will be
 attributed to the named `actual-author` under the named software license.
 
 _A list of SPDX license identifiers can be found here:
-https://spdx.org/licenses/_
+https://spdx.org/licenses/_ -->
 
 ## License
 Copyright (c) 2022 Joseph Hale, All Rights Reserved
