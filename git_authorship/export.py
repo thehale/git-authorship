@@ -8,10 +8,20 @@ from pathlib import Path
 
 import plotly.graph_objects as go
 
+from ._pathutils import io_handle
+from ._pathutils import Writeable
 from ._types import RepoAuthorship
 
 
-def as_treemap(authorship: RepoAuthorship, output: Path = Path("authorship.html")):
+def as_treemap(authorship: RepoAuthorship, output: Writeable = Path("authorship.html")):
+    """
+    Exports the authorship as an interactive treemap (in an HTML file)
+
+    Args:
+        authorship (RepoAuthorship): The authorship to export
+        output (Union[PathLike, IO]): The output file path or handle.
+            If a path, it will be open and closed. Handles are left open.
+    """
     ids = [str(file) for file in authorship.keys()]
     parents = [
         str(file.parent) if str(file) != "." else "" for file in authorship.keys()
@@ -42,8 +52,16 @@ def as_treemap(authorship: RepoAuthorship, output: Path = Path("authorship.html"
     fig.write_html(output)
 
 
-def as_json(authorship: RepoAuthorship, output: Path = Path("authorship.json")):
-    with open(output, "w") as f:
+def as_json(authorship: RepoAuthorship, output: Writeable = Path("authorship.json")):
+    """
+    Exports the authorship in JSON format
+
+    Args:
+        authorship (RepoAuthorship): The authorship to export
+        output (Union[PathLike, IO]): The output file path or handle.
+            If a path, it will be open and closed. Handles are left open.
+    """
+    with io_handle(output) as f:
         json.dump({str(path): authors for path, authors in authorship.items()}, f)
 
 
