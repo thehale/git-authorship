@@ -14,8 +14,12 @@ from git_authorship import export
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("location", nargs="?", default=".")
-    parser.add_argument("--clone-to", nargs="?", default="./repo")
+    parser.add_argument(
+        "location", nargs="?", default=".", help="The URL/path to repo to analyze"
+    )
+    parser.add_argument(
+        "--clone-to", nargs="?", default="./repo", help="The path to clone to"
+    )
     parser.add_argument(
         "--branch", nargs="?", default=None, help="The branch/revision to checkout"
     )
