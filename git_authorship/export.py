@@ -84,7 +84,7 @@ def as_csv(
     with io_handle(output) as f:
         writer = csv.writer(f)
         writer.writerow(["path", "author", "lines"])
-        for path, authors in authorship.items():
+        for path, authors in sorted(authorship.items(), key=lambda x: x[0]):
             for author, lines in sorted(
                 authors.items(), key=lambda x: x[1], reverse=True
             ):
