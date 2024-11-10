@@ -11,5 +11,5 @@ def test_full_workflow(snapshot):
         )
     )
 
-    with open("build/authorship.json", "r") as f:
-        snapshot.assert_match(f.read(), "authorship.json")
+    with open("build/authorship.csv", "r") as f:
+        snapshot.assert_match(f.read(), "authorship.csv")

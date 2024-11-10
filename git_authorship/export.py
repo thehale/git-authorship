@@ -3,6 +3,7 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
+import csv
 import json
 from pathlib import Path
 
@@ -69,4 +70,25 @@ def as_json(
         json.dump({str(path): authors for path, authors in authorship.items()}, f)
 
 
-__all__ = ["as_treemap", "as_json"]
+def as_csv(
+    authorship: RepoAuthorship, output: Writeable = Path("build/authorship.csv")
+):
+    """
+    Exports the authorship in CSV format
+
+    Args:
+        authorship (RepoAuthorship): The authorship to export
+        output (Union[PathLike, IO]): The output file path or handle.
+            If a path, it will be open and closed. Handles are left open.
+    """
+    with io_handle(output) as f:
+        writer = csv.writer(f)
+        writer.writerow(["path", "author", "lines"])
+        for path, authors in authorship.items():
+            for author, lines in sorted(
+                authors.items(), key=lambda x: x[1], reverse=True
+            ):
+                writer.writerow([path, author, lines])
+
+
+__all__ = ["as_treemap", "as_json", "as_csv"]

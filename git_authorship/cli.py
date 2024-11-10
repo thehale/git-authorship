@@ -53,6 +53,7 @@ def run(args: Args):
     repo_authorship = authorship.for_repo(repo)
     export.as_treemap(repo_authorship)
     export.as_json(repo_authorship)
+    export.as_csv(repo_authorship)
 
 
 def main(argv=None):
