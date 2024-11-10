@@ -57,8 +57,8 @@ files for labelling the licenses under which contributors have shared their code
      ```
      
 4. Run `python ./git_authorship REPO_URL` 
-   - Generates a treemap at `authorship.html`
-   - AND Generates a JSON output at `authorship.json`
+   - Generates a treemap at `build/authorship.html`
+   - AND Generates a JSON output at `build/authorship.json`
 
 <!-- 
 ## Other Features
@@ -97,7 +97,7 @@ _A list of SPDX license identifiers can be found here:
 https://spdx.org/licenses/_ -->
 
 ## License
-Copyright (c) 2022 Joseph Hale, All Rights Reserved
+Copyright (c) 2022-2024 Joseph Hale, All Rights Reserved
 
 Provided under the terms of the [Mozilla Public License, version 2.0](./LICENSE)
 
