@@ -34,21 +34,26 @@ def parse_args(argv=None) -> Args:
     return Args(args.location, args.clone_to, args.branch)
 
 
-def ensure_cloned_and_pulled(location: str, clone_to: str):
-    log.info(f"Cloning {location} to {clone_to}")
-    if not Path(clone_to).exists():
-        Repo.clone_from(location, clone_to)
-    else:
-        Repo(clone_to).git.pull()
+def clone_and_checkout(args: Args):
+    log.info(f"Cloning {args.location} @ {args.branch} to {args.clone_to}")
 
-    return Repo(clone_to)
+    if not Path(args.clone_to).exists():
+        Repo.clone_from(args.location, args.clone_to)
 
+    repo = Repo(args.clone_to)
 
-def main(argv=None):
-    args = parse_args(argv)
-    repo = ensure_cloned_and_pulled(args.location, args.clone_to)
     if args.branch:
         repo.git.checkout(args.branch)
+
+    return repo
+
+
+def run(args: Args):
+    repo = clone_and_checkout(args)
     repo_authorship = authorship.for_repo(repo)
     export.as_treemap(repo_authorship)
     export.as_json(repo_authorship)
+
+
+def main(argv=None):
+    run(parse_args(argv))
