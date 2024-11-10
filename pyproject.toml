@@ -40,7 +40,7 @@ authorized_licenses = [
     "Mozilla Public License 2.0 (MPL 2.0)",
     "Unlicense"
 ]
-unautorized_licenses = [
+unauthorized_licenses = [
     "GPL",
     "GNU General Public License v2 (GPLv2)"
 ]
