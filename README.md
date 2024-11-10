@@ -17,9 +17,19 @@ Interactive reports showing who wrote each line of code in your git repository.
 [![](https://badgen.net/badge/icon/Sponsor/pink?icon=github&label)](https://github.com/sponsors/thehale)
 [![Joseph Hale's software engineering blog](https://jhale.dev/badges/website.svg)](https://jhale.dev)
 [![](https://jhale.dev/badges/follow.svg)](https://www.linkedin.com/comm/mynetwork/discovery-see-all?usecase=PEOPLE_FOLLOWS&followMember=thehale)
+</div>
+
+```bash
+pip install git-authorship
+
+git-authorship https://github.com/USERNAME/REPOSITORY
+
+# Open build/authorship.html in a web browser
+```
+<div align="center">
 
 ![GIF demonstrating an interactive report of the authors of the cubing library
-cubing.js](./docs/git-authorship-demo-cubingjs.gif)
+cubing.js](https://github.com/thehale/git-authorship/blob/master/docs/git-authorship-demo-cubingjs.gif?raw=true)
 
 </div>
 
@@ -36,31 +46,11 @@ Action](https://github.com/contributor-assistant/github-action) for that
 functionality), it does help you clearly identify who your contributors are and
 the exact lines of code they wrote.
 
+
+<!-- 
 To support libraries undergoing re-licensing, `git-authorship` includes config
 files for labelling the licenses under which contributors have shared their code.
 
-## Quickstart
-
-1. Clone this repository: `git clone https://github.com/thehale/git-authorship`
-2. Install [Python Poetry](https://python-poetry.org/docs/#installing-with-the-official-installer)
-    
-    ```
-    curl -sSL https://install.python-poetry.org | python3 -
-    ```
-
-3. Create a virtual environment and install dependencies
-     
-     ```
-     poetry config virtualenvs.in-project true
-     poetry shell
-     poetry install
-     ```
-     
-4. Run `python ./git_authorship REPO_URL` 
-   - Generates a treemap at `build/authorship.html`
-   - AND Generates a JSON output at `build/authorship.json`
-
-<!-- 
 ## Other Features
 
 ### Author Licenses
