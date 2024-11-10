@@ -35,7 +35,9 @@ def parse_args(argv=None) -> Args:
 
 
 def clone_and_checkout(args: Args):
-    log.info(f"Cloning {args.location} @ {args.branch} to {args.clone_to}")
+    log.info(
+        f"Cloning {args.location} @ {args.branch or '<default>'} to {args.clone_to}"
+    )
 
     if not Path(args.clone_to).exists():
         Repo.clone_from(args.location, args.clone_to)
