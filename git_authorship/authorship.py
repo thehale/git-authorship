@@ -19,6 +19,27 @@ log = logging.getLogger(__name__)
 
 
 def for_file(repo: Repo, path: Path) -> Authorship:
+    """
+    Calculates how many lines each author has contributed to a file
+
+    e.g. For a file with the following contents:
+
+    ```
+    line 1  (author 1)
+    line 2  (author 2)
+    line 3  (author 1)
+    line 4  (author 2)
+    line 5  (author 1)
+    ```
+
+    The returned authorship would be:
+    ```
+    {
+      "author1": 3,
+      "author2": 2,
+    }
+    ```
+    """
     log.info(f"Blaming {path}")
     raw_blame = repo.blame("HEAD", str(path), rev_opts=["-M", "-C", "-C", "-C"])
     blame = [
