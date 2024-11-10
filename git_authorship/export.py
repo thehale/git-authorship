@@ -13,7 +13,9 @@ from ._pathutils import Writeable
 from ._types import RepoAuthorship
 
 
-def as_treemap(authorship: RepoAuthorship, output: Writeable = Path("authorship.html")):
+def as_treemap(
+    authorship: RepoAuthorship, output: Writeable = Path("build/authorship.html")
+):
     """
     Exports the authorship as an interactive treemap (in an HTML file)
 
@@ -52,7 +54,9 @@ def as_treemap(authorship: RepoAuthorship, output: Writeable = Path("authorship.
     fig.write_html(output)
 
 
-def as_json(authorship: RepoAuthorship, output: Writeable = Path("authorship.json")):
+def as_json(
+    authorship: RepoAuthorship, output: Writeable = Path("build/authorship.json")
+):
     """
     Exports the authorship in JSON format
 
