@@ -16,7 +16,9 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("location", nargs="?", default=".")
     parser.add_argument("--clone-to", nargs="?", default="./repo")
-    # TODO --branch (to analyze a specific branch)
+    parser.add_argument(
+        "--branch", nargs="?", default=None, help="The branch/revision to checkout"
+    )
     return parser.parse_args()
 
 
@@ -32,6 +34,8 @@ def ensure_cloned_and_pulled(location: str, clone_to: str):
 if __name__ == "__main__":
     args = parse_args()
     repo = ensure_cloned_and_pulled(args.location, args.clone_to)
+    if args.branch:
+        repo.git.checkout(args.branch)
     repo_authorship = authorship.for_repo(repo)
     export.as_treemap(repo_authorship)
     export.as_json(repo_authorship)
