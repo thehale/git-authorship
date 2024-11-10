@@ -59,4 +59,7 @@ def run(args: Args):
 
 
 def main(argv=None):
+    logging.getLogger("git_authorship").addHandler(logging.StreamHandler())
+    logging.getLogger("git_authorship").setLevel(logging.INFO)
+
     run(parse_args(argv))
