@@ -1,32 +1,41 @@
-from git_authorship.cli import Args
+from tempfile import TemporaryDirectory
+from test.fixtures.tmp_repo import TemporaryRepository
+
+import pytest
+
 from git_authorship.cli import run
 
 
-def test_full_workflow(snapshot):
-    run(
-        Args(
-            location="https://github.com/thehale/git-authorship",
-            clone_to="./build/test/e2e",
-            branch="b655cc6c634a52660d3d2e87f9978343c92aa998",
-            author_licenses_path=None,
-            use_cache=False,
-        )
-    )
+@pytest.fixture
+def repo():
+    with TemporaryDirectory() as d:
+        repo = TemporaryRepository(d)
+
+        repo.set_file("greeting.txt", "Hello, world!\n")
+        repo.commit("Initial commit", "Alice", "alice@example.com")
+
+        repo.append_file("greeting.txt", "Excited to be here!\n")
+        repo.commit("Second commit", "Bob", "bob@example.com")
+
+        yield repo
+
+
+def test_typical_workflow(snapshot, repo: TemporaryRepository):
+    run([repo.dir, "--clone-to", "./tmp", "--no-cache"])
 
     with open("build/authorship.csv", "r") as f:
         snapshot.assert_match(f.read(), "authorship.csv")
 
 
-def test_full_workflow_with_author_licenses(snapshot):
-    run(
-        Args(
-            location="https://github.com/thehale/git-authorship",
-            clone_to="./build/test/e2e",
-            branch="b655cc6c634a52660d3d2e87f9978343c92aa998",
-            author_licenses_path="./test/fixtures/licensing.csv",
-            use_cache=False,
-        )
-    )
+def test_workflow_with_author_licenses(snapshot, repo: TemporaryRepository):
+    # fmt: off
+    run([ 
+        repo.dir,
+        "--author-licenses", "./test/fixtures/licensing.csv",
+        "--clone-to", "./tmp",
+        "--no-cache",
+    ])
+    # fmt: on
 
     with open("build/authorship.csv", "r") as f:
         snapshot.assert_match(f.read(), "authorship.csv")

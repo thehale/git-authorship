@@ -8,7 +8,9 @@ import logging
 import shutil
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Iterable
 from typing import Optional
+from typing import Union
 
 from git import Repo
 
@@ -90,7 +92,10 @@ def clone_and_checkout(args: Args):
     return repo
 
 
-def run(args: Args):
+def run(args: Union[Args, Iterable[str]]):
+    if isinstance(args, Iterable):
+        args = parse_args(args)
+
     repo = clone_and_checkout(args)
     repo_authorship = authorship.for_repo(
         repo,
