@@ -12,7 +12,7 @@ def test_default_args():
     assert args.clone_to == "./build/repo"
     assert args.branch is None
     assert args.author_licenses_path is None
-    assert args.use_authorship_cache is True
+    assert args.use_cache is True
 
 
 def test_location():
@@ -41,6 +41,6 @@ def test_author_licenses_existing_path():
 
 
 def test_no_authorship_cache():
-    args = parse_args(["--no-authorship-cache"])
+    args = parse_args(["--no-cache"])
 
-    assert args.use_authorship_cache is False
+    assert args.use_cache is False

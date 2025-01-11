@@ -23,7 +23,7 @@ class Args:
     clone_to: str
     branch: str
     author_licenses_path: Optional[Path]
-    use_authorship_cache: bool = True
+    use_cache: bool = True
 
 
 def parse_args(argv=None) -> Args:
@@ -44,7 +44,9 @@ def parse_args(argv=None) -> Args:
         help="The path to a CSV file containing author licenses",
     )
     parser.add_argument(
-        "--no-authorship-cache", action="store_true", help="Ignore authorship cache"
+        "--no-cache",
+        action="store_true",
+        help="Recompute from scratch, including a re-clone.",
     )
 
     args = parser.parse_args(argv)
@@ -54,7 +56,7 @@ def parse_args(argv=None) -> Args:
         args.clone_to,
         args.branch,
         _parse_author_licenses_path(args.author_licenses),
-        not args.no_authorship_cache,
+        not args.no_cache,
     )
 
 
@@ -89,7 +91,7 @@ def run(args: Args):
     repo_authorship = authorship.for_repo(
         repo,
         license_file=args.author_licenses_path,
-        use_cache=args.use_authorship_cache,
+        use_cache=args.use_cache,
     )
     export.as_treemap(repo_authorship)
     export.as_json(repo_authorship)

@@ -9,7 +9,7 @@ def test_full_workflow(snapshot):
             clone_to="./build/test/e2e",
             branch="b655cc6c634a52660d3d2e87f9978343c92aa998",
             author_licenses_path=None,
-            use_authorship_cache=False,
+            use_cache=False,
         )
     )
 
@@ -24,7 +24,7 @@ def test_full_workflow_with_author_licenses(snapshot):
             clone_to="./build/test/e2e",
             branch="b655cc6c634a52660d3d2e87f9978343c92aa998",
             author_licenses_path="./test/fixtures/licensing.csv",
-            use_authorship_cache=False,
+            use_cache=False,
         )
     )
 
