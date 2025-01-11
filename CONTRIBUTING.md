@@ -20,6 +20,11 @@
 4. Run the test suite with `pytest` to verify that everything works.
 5. Have fun with your improvements!
 
+## Running Tests
+
+```bash
+poetry run pytest
+```
 
 ## Preferences
 
