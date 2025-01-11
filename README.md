@@ -47,26 +47,31 @@ functionality), it does help you clearly identify who your contributors are and
 the exact lines of code they wrote.
 
 
-<!-- 
 To support libraries undergoing re-licensing, `git-authorship` includes config
 files for labelling the licenses under which contributors have shared their code.
 
 ## Other Features
 
 ### Author Licenses
-If you want to include information about the OSS license offered by each
-contributor, simply add a line for each author to `config/author-licenses.txt`
-in the following format:
 
-```
-author-name|license-SPDX-id
-```
-
+You can include OSS licensing information for each author via a `.csv` file. 
 The `author-name` will be matched to the values shown in the generated
 authorship report.
 
-_A list of SPDX license identifiers can be found here:
-https://spdx.org/licenses/_
+_licensing.csv_ 
+```
+author-name,license-SPDX-id
+```
+
+<sub>A list of SPDX license identifiers can be found at [spdx.org/licenses](https://spdx.org/licenses)</sub>
+
+Then tell the CLI about the authorship file
+
+```bash
+git-authorship REPO_URL --author-licenses licensing.csv
+```
+
+<!-- 
 
 
 ### Pseudonyms

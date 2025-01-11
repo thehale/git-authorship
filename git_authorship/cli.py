@@ -7,6 +7,7 @@ import argparse
 import logging
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Optional
 
 from git import Repo
 
@@ -21,6 +22,8 @@ class Args:
     location: str
     clone_to: str
     branch: str
+    author_licenses_path: Optional[Path]
+    use_authorship_cache: bool = True
 
 
 def parse_args(argv=None) -> Args:
@@ -34,9 +37,35 @@ def parse_args(argv=None) -> Args:
     parser.add_argument(
         "--branch", nargs="?", default=None, help="The branch/revision to checkout"
     )
+    parser.add_argument(
+        "--author-licenses",
+        nargs="?",
+        default=None,
+        help="The path to a CSV file containing author licenses",
+    )
+    parser.add_argument(
+        "--no-authorship-cache", action="store_true", help="Ignore authorship cache"
+    )
 
     args = parser.parse_args(argv)
-    return Args(args.location, args.clone_to, args.branch)
+
+    return Args(
+        args.location,
+        args.clone_to,
+        args.branch,
+        _parse_author_licenses_path(args.author_licenses),
+        not args.no_authorship_cache,
+    )
+
+
+def _parse_author_licenses_path(arg: Optional[str] = None) -> Optional[Path]:
+    if not arg:
+        return None
+    else:
+        if not Path(arg).exists():
+            raise FileNotFoundError(arg)
+        else:
+            return Path(arg)
 
 
 def clone_and_checkout(args: Args):
@@ -57,7 +86,11 @@ def clone_and_checkout(args: Args):
 
 def run(args: Args):
     repo = clone_and_checkout(args)
-    repo_authorship = authorship.for_repo(repo)
+    repo_authorship = authorship.for_repo(
+        repo,
+        license_file=args.author_licenses_path,
+        use_cache=args.use_authorship_cache,
+    )
     export.as_treemap(repo_authorship)
     export.as_json(repo_authorship)
     export.as_csv(repo_authorship)

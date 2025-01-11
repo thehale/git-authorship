@@ -5,12 +5,15 @@
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 import csv
 import json
+from collections import defaultdict
 from pathlib import Path
+from typing import Dict
 
 import plotly.graph_objects as go
 
 from ._pathutils import io_handle
 from ._pathutils import Writeable
+from ._types import Authorship
 from ._types import RepoAuthorship
 
 
@@ -29,11 +32,27 @@ def as_treemap(
     parents = [
         str(file.parent) if str(file) != "." else "" for file in authorship.keys()
     ]
-    values = [sum(authors.values()) for authors in authorship.values()]
+    values = [
+        sum(info["lines"] for info in authors.values())
+        for authors in authorship.values()
+    ]
     labels = [file.name for file in authorship.keys()]
+
+    def author_list(authorship: Authorship):
+        return "<br>Authors:<br> - " + "<br> - ".join(
+            f"{author}: {info['lines']}" for author, info in authorship.items()
+        )
+
+    def license_list(authorship: Authorship):
+        licensing: Dict[str, int] = defaultdict(int)
+        for _, info in authorship.items():
+            licensing[info.get("license", "Unknown")] += info["lines"]
+        return "<br>Licenses:<br> - " + "<br> - ".join(
+            f"{license}: {lines}" for license, lines in licensing.items()
+        )
+
     descriptions = [
-        "<br>Authors:<br> - "
-        + "<br> - ".join(f"{author}: {lines}" for author, lines in authorship.items())
+        f"{author_list(authorship)}<br>{license_list(authorship)}"
         for authorship in authorship.values()
     ]
 
@@ -83,12 +102,12 @@ def as_csv(
     """
     with io_handle(output) as f:
         writer = csv.writer(f)
-        writer.writerow(["path", "author", "lines"])
+        writer.writerow(["path", "author", "lines", "license"])
         for path, authors in sorted(authorship.items(), key=lambda x: x[0]):
-            for author, lines in sorted(
-                authors.items(), key=lambda x: x[1], reverse=True
+            for author, info in sorted(
+                authors.items(), key=lambda x: x[1]["lines"], reverse=True
             ):
-                writer.writerow([path, author, lines])
+                writer.writerow([path, author, info["lines"], info.get("license")])
 
 
 __all__ = ["as_treemap", "as_json", "as_csv"]
