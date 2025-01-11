@@ -5,6 +5,7 @@
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 import argparse
 import logging
+import shutil
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
@@ -74,6 +75,9 @@ def clone_and_checkout(args: Args):
     log.info(
         f"Cloning {args.location} @ {args.branch or '<default>'} to {args.clone_to}"
     )
+
+    if not args.use_cache:
+        shutil.rmtree(args.clone_to, ignore_errors=True)
 
     if not Path(args.clone_to).exists():
         Repo.clone_from(args.location, args.clone_to)
