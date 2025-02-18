@@ -42,5 +42,4 @@ def test_author_licenses_existing_path():
 
 def test_no_authorship_cache():
     args = parse_args(["--no-cache"])
-
     assert args.use_cache is False
