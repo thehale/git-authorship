@@ -27,7 +27,7 @@ def tmpdir():
 
 
 def test_typical_workflow(snapshot, repo: TemporaryRepository, tmpdir: str):
-    run([repo.dir, "--clone-to", tmpdir, "--no-cache"])
+    run([repo.dir, "--clone-to", tmpdir])
 
     with open("build/authorship.csv", "r") as f:
         snapshot.assert_match(f.read(), "authorship.csv")

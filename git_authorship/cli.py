@@ -81,7 +81,7 @@ def clone_and_checkout(args: Args):
     if not args.use_cache:
         shutil.rmtree(args.clone_to, ignore_errors=True)
 
-    if not Path(args.clone_to).exists():
+    if not Path(args.clone_to).exists() or not (Path(args.clone_to) / ".git").exists():
         Repo.clone_from(args.location, args.clone_to)
 
     repo = Repo(args.clone_to)
