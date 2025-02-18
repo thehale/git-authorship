@@ -24,6 +24,7 @@ log = logging.getLogger(__name__)
 class Args:
     location: str
     clone_to: str
+    output: Path
     branch: str
     author_licenses_path: Optional[Path]
     use_cache: bool = True
@@ -33,6 +34,13 @@ def parse_args(argv=None) -> Args:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "location", nargs="?", default=".", help="The URL/path to repo to analyze"
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        nargs="?",
+        default="./build",
+        help="The directory to output the reports",
     )
     parser.add_argument(
         "--clone-to", nargs="?", default="./build/repo", help="The path to clone to"
@@ -54,13 +62,22 @@ def parse_args(argv=None) -> Args:
 
     args = parser.parse_args(argv)
 
-    return Args(
-        args.location,
-        args.clone_to,
-        args.branch,
-        _parse_author_licenses_path(args.author_licenses),
-        not args.no_cache,
+    return _assert_valid_args(
+        Args(
+            args.location,
+            args.clone_to,
+            Path(args.output),
+            args.branch,
+            _parse_author_licenses_path(args.author_licenses),
+            not args.no_cache,
+        )
     )
+
+
+def _assert_valid_args(args: Args):
+    if args.output.exists() and args.output.is_file():
+        raise ValueError(f"--output cannot be an existing file. Given: {args.output}")
+    return args
 
 
 def _parse_author_licenses_path(arg: Optional[str] = None) -> Optional[Path]:
@@ -100,11 +117,12 @@ def run(args: Union[Args, Iterable[str]]):
     repo_authorship = authorship.for_repo(
         repo,
         license_file=args.author_licenses_path,
+        cache_dir=args.output / "cache",
         use_cache=args.use_cache,
     )
-    export.as_treemap(repo_authorship)
-    export.as_json(repo_authorship)
-    export.as_csv(repo_authorship)
+    export.as_treemap(repo_authorship, output=args.output / "authorship.html")
+    export.as_json(repo_authorship, output=args.output / "authorship.json")
+    export.as_csv(repo_authorship, output=args.output / "authorship.csv")
 
 
 def main(argv=None):

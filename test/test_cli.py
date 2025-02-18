@@ -10,6 +10,7 @@ def test_default_args():
 
     assert args.location == "."
     assert args.clone_to == "./build/repo"
+    assert args.output == Path("build")
     assert args.branch is None
     assert args.author_licenses_path is None
     assert args.use_cache is True
@@ -43,3 +44,18 @@ def test_author_licenses_existing_path():
 def test_no_authorship_cache():
     args = parse_args(["--no-cache"])
     assert args.use_cache is False
+
+
+def test_output_path():
+    args = parse_args(["--output", "somewhere_else"])
+    assert args.output == Path("somewhere_else")
+
+
+def test_output_path_short_option():
+    args = parse_args(["-o", "somewhere_else"])
+    assert args.output == Path("somewhere_else")
+
+
+def test_output_path_rejects_existing_file_path():
+    with assertRaises(ValueError, match="--output cannot be an existing file"):
+        parse_args(["-o", __file__])

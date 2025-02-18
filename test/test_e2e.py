@@ -30,9 +30,15 @@ def tmpdirs():
 def test_typical_workflow(
     snapshot, repo: TemporaryRepository, tmpdirs: TemporaryDirectoryFactory
 ):
-    run([repo.dir, "--clone-to", tmpdirs.new()])
+    # fmt: off
+    run([
+        repo.dir, 
+        "--clone-to", tmpdirs.new(),
+        "--output", (output := tmpdirs.new())
+    ])
+    # fmt: on
 
-    with open("build/authorship.csv", "r") as f:
+    with open(f"{output}/authorship.csv", "r") as f:
         snapshot.assert_match(f.read(), "authorship.csv")
 
 
@@ -44,9 +50,9 @@ def test_workflow_with_author_licenses(
         repo.dir,
         "--clone-to", tmpdirs.new(),
         "--author-licenses", "./test/fixtures/licensing.csv",
-        "--no-cache"
+        "--output", (output := tmpdirs.new()),
     ])
     # fmt: on
 
-    with open("build/authorship.csv", "r") as f:
+    with open(f"{output}/authorship.csv", "r") as f:
         snapshot.assert_match(f.read(), "authorship.csv")
