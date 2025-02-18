@@ -20,19 +20,27 @@ def repo():
         yield repo
 
 
-def test_typical_workflow(snapshot, repo: TemporaryRepository):
-    run([repo.dir, "--clone-to", "./tmp", "--no-cache"])
+@pytest.fixture
+def tmpdir():
+    with TemporaryDirectory() as d:
+        yield d
+
+
+def test_typical_workflow(snapshot, repo: TemporaryRepository, tmpdir: str):
+    run([repo.dir, "--clone-to", tmpdir, "--no-cache"])
 
     with open("build/authorship.csv", "r") as f:
         snapshot.assert_match(f.read(), "authorship.csv")
 
 
-def test_workflow_with_author_licenses(snapshot, repo: TemporaryRepository):
+def test_workflow_with_author_licenses(
+    snapshot, repo: TemporaryRepository, tmpdir: str
+):
     # fmt: off
     run([ 
         repo.dir,
         "--author-licenses", "./test/fixtures/licensing.csv",
-        "--clone-to", "./tmp",
+        "--clone-to", tmpdir,
         "--no-cache",
     ])
     # fmt: on
