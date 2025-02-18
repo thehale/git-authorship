@@ -1,4 +1,5 @@
 from tempfile import TemporaryDirectory
+from test.fixtures.tmp_dir_factory import TemporaryDirectoryFactory
 from test.fixtures.tmp_repo import TemporaryRepository
 
 import pytest
@@ -21,27 +22,29 @@ def repo():
 
 
 @pytest.fixture
-def tmpdir():
-    with TemporaryDirectory() as d:
-        yield d
+def tmpdirs():
+    with TemporaryDirectoryFactory() as factory:
+        yield factory
 
 
-def test_typical_workflow(snapshot, repo: TemporaryRepository, tmpdir: str):
-    run([repo.dir, "--clone-to", tmpdir])
+def test_typical_workflow(
+    snapshot, repo: TemporaryRepository, tmpdirs: TemporaryDirectoryFactory
+):
+    run([repo.dir, "--clone-to", tmpdirs.new()])
 
     with open("build/authorship.csv", "r") as f:
         snapshot.assert_match(f.read(), "authorship.csv")
 
 
 def test_workflow_with_author_licenses(
-    snapshot, repo: TemporaryRepository, tmpdir: str
+    snapshot, repo: TemporaryRepository, tmpdirs: TemporaryDirectoryFactory
 ):
     # fmt: off
     run([ 
         repo.dir,
+        "--clone-to", tmpdirs.new(),
         "--author-licenses", "./test/fixtures/licensing.csv",
-        "--clone-to", tmpdir,
-        "--no-cache",
+        "--no-cache"
     ])
     # fmt: on
 
