@@ -27,6 +27,7 @@ class Args:
     output: Path
     branch: str
     author_licenses: Optional[Path]
+    pseudonyms: Optional[Path]
     use_cache: bool = True
 
 
@@ -55,6 +56,12 @@ def parse_args(argv=None) -> Args:
         help="The path to a CSV file containing author licenses",
     )
     parser.add_argument(
+        "--pseudonyms",
+        nargs="?",
+        default=None,
+        help="The path to a CSV file containing pseudonyms",
+    )
+    parser.add_argument(
         "--no-cache",
         action="store_true",
         help="Recompute from scratch, including a re-clone.",
@@ -69,6 +76,7 @@ def parse_args(argv=None) -> Args:
             Path(args.output),
             args.branch,
             _parse_file_path(args.author_licenses, "--author-licenses"),
+            args.pseudonyms,
             not args.no_cache,
         )
     )
