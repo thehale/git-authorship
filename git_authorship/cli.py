@@ -86,6 +86,8 @@ def _parse_author_licenses_path(arg: Optional[str] = None) -> Optional[Path]:
     else:
         if not Path(arg).exists():
             raise FileNotFoundError(arg)
+        elif Path(arg).is_dir():
+            raise ValueError(f"--author-licenses cannot be a folder. Given: {arg}")
         else:
             return Path(arg)
 

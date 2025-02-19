@@ -36,6 +36,11 @@ def test_author_licenses_nonexistent_path():
         parse_args(["--author-licenses", "nonexistent.csv"])
 
 
+def test_author_licenses_rejects_folder_path():
+    with assertRaises(ValueError, match="--author-licenses cannot be a folder"):
+        parse_args(["--author-licenses", str(Path(__file__).parent)])
+
+
 def test_author_licenses_existing_path():
     args = parse_args(["--author-licenses", "test/fixtures/licensing.csv"])
     assert args.author_licenses == Path("test/fixtures/licensing.csv")
