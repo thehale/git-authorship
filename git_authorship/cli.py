@@ -23,7 +23,7 @@ log = logging.getLogger(__name__)
 @dataclass
 class Args:
     location: str
-    clone_to: str
+    clone_to: Path
     output: Path
     branch: str
     author_licenses: Optional[Path]
@@ -65,7 +65,7 @@ def parse_args(argv=None) -> Args:
     return _assert_valid_args(
         Args(
             args.location,
-            args.clone_to,
+            Path(args.clone_to),
             Path(args.output),
             args.branch,
             _parse_author_licenses_path(args.author_licenses),
@@ -98,7 +98,7 @@ def clone_and_checkout(args: Args):
     if not args.use_cache:
         shutil.rmtree(args.clone_to, ignore_errors=True)
 
-    if not Path(args.clone_to).exists() or not (Path(args.clone_to) / ".git").exists():
+    if not args.clone_to.exists() or not (args.clone_to / ".git").exists():
         Repo.clone_from(args.location, args.clone_to)
 
     repo = Repo(args.clone_to)

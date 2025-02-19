@@ -9,7 +9,7 @@ def test_default_args():
     args = parse_args([])
 
     assert args.location == "."
-    assert args.clone_to == "./build/repo"
+    assert args.clone_to == Path("./build/repo")
     assert args.output == Path("build")
     assert args.branch is None
     assert args.author_licenses is None
@@ -23,7 +23,7 @@ def test_location():
 
 def test_clone_to():
     args = parse_args(["--clone-to", "/tmp/repo"])
-    assert args.clone_to == "/tmp/repo"
+    assert args.clone_to == Path("/tmp/repo")
 
 
 def test_branch():
