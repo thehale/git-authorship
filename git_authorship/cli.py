@@ -26,7 +26,7 @@ class Args:
     clone_to: str
     output: Path
     branch: str
-    author_licenses_path: Optional[Path]
+    author_licenses: Optional[Path]
     use_cache: bool = True
 
 
@@ -116,7 +116,7 @@ def run(args: Union[Args, Iterable[str]]):
     repo = clone_and_checkout(args)
     repo_authorship = authorship.for_repo(
         repo,
-        license_file=args.author_licenses_path,
+        license_file=args.author_licenses,
         cache_dir=args.output / "cache",
         use_cache=args.use_cache,
     )

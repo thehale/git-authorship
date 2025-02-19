@@ -12,7 +12,7 @@ def test_default_args():
     assert args.clone_to == "./build/repo"
     assert args.output == Path("build")
     assert args.branch is None
-    assert args.author_licenses_path is None
+    assert args.author_licenses is None
     assert args.use_cache is True
 
 
@@ -38,7 +38,7 @@ def test_author_licenses_nonexistent_path():
 
 def test_author_licenses_existing_path():
     args = parse_args(["--author-licenses", "test/fixtures/licensing.csv"])
-    assert args.author_licenses_path == Path("test/fixtures/licensing.csv")
+    assert args.author_licenses == Path("test/fixtures/licensing.csv")
 
 
 def test_no_authorship_cache():
