@@ -67,6 +67,16 @@ def test_output_path_rejects_existing_file_path():
         parse_args(["-o", __file__])
 
 
-# def test_pseudonyms_nonexistent_path():
-#     with assertRaises(FileNotFoundError):
-#         parse_args(["--pseudonyms", "nonexistent.csv"])
+def test_pseudonyms_nonexistent_path():
+    with assertRaises(FileNotFoundError):
+        parse_args(["--pseudonyms", "nonexistent.csv"])
+
+
+def test_pseudonyms_rejects_folder_path():
+    with assertRaises(ValueError, match="--pseudonyms cannot be a folder"):
+        parse_args(["--pseudonyms", str(Path(__file__).parent)])
+
+
+def test_pseudonyms_existing_path():
+    args = parse_args(["--pseudonyms", "test/fixtures/pseudonyms.csv"])
+    assert args.pseudonyms == Path("test/fixtures/pseudonyms.csv")

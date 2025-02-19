@@ -76,7 +76,7 @@ def parse_args(argv=None) -> Args:
             Path(args.output),
             args.branch,
             _parse_file_path(args.author_licenses, "--author-licenses"),
-            args.pseudonyms,
+            _parse_file_path(args.pseudonyms, "--pseudonyms"),
             not args.no_cache,
         )
     )
