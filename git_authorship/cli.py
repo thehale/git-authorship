@@ -68,7 +68,7 @@ def parse_args(argv=None) -> Args:
             Path(args.clone_to),
             Path(args.output),
             args.branch,
-            _parse_author_licenses_path(args.author_licenses),
+            _parse_file_path(args.author_licenses, "--author-licenses"),
             not args.no_cache,
         )
     )
@@ -80,14 +80,14 @@ def _assert_valid_args(args: Args):
     return args
 
 
-def _parse_author_licenses_path(arg: Optional[str] = None) -> Optional[Path]:
+def _parse_file_path(arg: Optional[str] = None, optname: str = "") -> Optional[Path]:
     if not arg:
         return None
     else:
         if not Path(arg).exists():
             raise FileNotFoundError(arg)
         elif Path(arg).is_dir():
-            raise ValueError(f"--author-licenses cannot be a folder. Given: {arg}")
+            raise ValueError(f"{optname} cannot be a folder. Given: {arg}")
         else:
             return Path(arg)
 
