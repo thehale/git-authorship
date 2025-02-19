@@ -56,3 +56,19 @@ def test_workflow_with_author_licenses(
 
     with open(f"{output}/authorship.csv", "r") as f:
         snapshot.assert_match(f.read(), "authorship.csv")
+
+
+def test_workflow_with_pseudonyms(
+    snapshot, repo: TemporaryRepository, tmpdirs: TemporaryDirectoryFactory
+):
+    # fmt: off
+    run([ 
+        repo.dir,
+        "--clone-to", tmpdirs.new(),
+        "--pseudonyms", "./test/fixtures/pseudonyms.csv",
+        "--output", (output := tmpdirs.new()),
+    ])
+    # fmt: on
+
+    with open(f"{output}/authorship.csv", "r") as f:
+        snapshot.assert_match(f.read(), "authorship.csv")
