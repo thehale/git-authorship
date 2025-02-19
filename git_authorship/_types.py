@@ -16,9 +16,16 @@ LineCount = int
 License = str
 
 
+class _Pseudonym(TypedDict):
+    author: Author
+    license: License
+
+
 class Config:
     AuthorLicenses = Dict[Author, License]
     """Map of 'Author' -> 'SPDX License'"""
+    Pseudonyms = Dict[Path, _Pseudonym]
+    """Map of 'Path' -> 'Pseudonym'"""
 
 
 class AuthorshipInfo(TypedDict):

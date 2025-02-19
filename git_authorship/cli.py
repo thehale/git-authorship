@@ -17,6 +17,7 @@ from git import Repo
 from git_authorship import authorship
 from git_authorship import export
 from git_authorship.config import load_licenses_config
+from git_authorship.config import load_pseudonyms_config
 
 log = logging.getLogger(__name__)
 
@@ -28,6 +29,7 @@ class Args:
     output: Path
     branch: str
     author_licenses: Optional[Path]
+    pseudonyms: Optional[Path]
     use_cache: bool = True
 
 
@@ -56,6 +58,12 @@ def parse_args(argv=None) -> Args:
         help="The path to a CSV file containing author licenses",
     )
     parser.add_argument(
+        "--pseudonyms",
+        nargs="?",
+        default=None,
+        help="The path to a CSV file containing pseudonyms",
+    )
+    parser.add_argument(
         "--no-cache",
         action="store_true",
         help="Recompute from scratch, including a re-clone.",
@@ -70,6 +78,7 @@ def parse_args(argv=None) -> Args:
             Path(args.output),
             args.branch,
             _parse_file_path(args.author_licenses, "--author-licenses"),
+            _parse_file_path(args.pseudonyms, "--pseudonyms"),
             not args.no_cache,
         )
     )
@@ -118,9 +127,11 @@ def run(args: Union[Args, Iterable[str]]):
 
     repo = clone_and_checkout(args)
     licenses = load_licenses_config(args.author_licenses)
+    pseudonyms = load_pseudonyms_config(args.pseudonyms)
     repo_authorship = authorship.for_repo(
         repo,
         licenses=licenses,
+        pseudonyms=pseudonyms,
         cache_dir=args.output / "cache",
         use_cache=args.use_cache,
     )

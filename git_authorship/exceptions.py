@@ -8,3 +8,7 @@ class ConfigException(GitAuthorshipException):
 
 class AuthorLicensesConfigException(ConfigException):
     """Thrown for malformed author licenses configs"""
+
+
+class PseudonymsConfigException(ConfigException):
+    """Thrown for malformed pseudonyms configs"""

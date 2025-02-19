@@ -26,6 +26,7 @@ def for_repo(
     repo: Repo,
     *,
     licenses: Config.AuthorLicenses = {},
+    pseudonyms: Config.Pseudonyms = {},
     cache_dir: Path = Path("build/cache"),
     use_cache: bool = True,
 ) -> RepoAuthorship:
@@ -68,6 +69,7 @@ def for_repo(
     else:
         data = _compute_repo_authorship(repo)
         data = _augment_author_licenses(data, licenses)
+        data = _augment_pseudonyms(data, pseudonyms)
         data = _augment_folder_authorships(data)
         cache_key.parent.mkdir(exist_ok=True, parents=True)
         export.as_json(data, cache_key)
@@ -132,6 +134,21 @@ def _augment_author_licenses(
             if author in licenses:
                 repo_authorship[path][author]["license"] = licenses[author]
 
+    return repo_authorship
+
+
+def _augment_pseudonyms(
+    repo_authorship: RepoAuthorship, pseudonyms: Config.Pseudonyms
+) -> RepoAuthorship:
+    for pseudo_path, pseudonym in pseudonyms.items():  # TODO - optimize out O(n^2)
+        for repo_path, authorship in repo_authorship.items():
+            if repo_path.name.startswith(pseudo_path.name):
+                repo_authorship[repo_path] = {
+                    pseudonym["author"]: {
+                        "lines": sum(a["lines"] for a in authorship.values()),
+                        "license": pseudonym["license"],
+                    }
+                }
     return repo_authorship
 
 
