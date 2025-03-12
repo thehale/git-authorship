@@ -68,6 +68,7 @@ def for_repo(
     else:
         data = _compute_repo_authorship(repo)
         data = _augment_author_licenses(data, licenses)
+        data = _augment_folder_authorships(data)
         cache_key.parent.mkdir(exist_ok=True, parents=True)
         export.as_json(data, cache_key)
         return data
@@ -119,16 +120,7 @@ def _compute_repo_authorship(repo: Repo) -> RepoAuthorship:
         Path(str(f)[len(str(root)) + 1 :])
         for f in iterfiles(root, exclude=[root / d for d in EXCLUDE_DIRS])
     ]
-    file_authorships = {path: for_file(repo, path) for path in filepaths}
-
-    repo_authorship: RepoAuthorship = defaultdict(lambda: defaultdict(_AuthorshipInfo))
-    for file, authorship in file_authorships.items():
-        parts = f"./{file}".split("/")
-        for i in range(len(parts)):
-            cur = "/".join(parts[: i + 1])
-            for author, info in authorship.items():
-                repo_authorship[Path(cur)][author]["lines"] += info["lines"]
-
+    repo_authorship = {path: for_file(repo, path) for path in filepaths}
     return repo_authorship
 
 
@@ -141,6 +133,24 @@ def _augment_author_licenses(
                 repo_authorship[path][author]["license"] = licenses[author]
 
     return repo_authorship
+
+
+def _augment_folder_authorships(repo_authorship: RepoAuthorship) -> RepoAuthorship:
+    _authorship: RepoAuthorship = defaultdict(lambda: defaultdict(_AuthorshipInfo))
+    for file, authorship in repo_authorship.items():
+        for author, info in authorship.items():
+            for parent in _parents(file):
+                _authorship[parent][author]["lines"] += info["lines"]
+                if "license" in info:
+                    _authorship[parent][author]["license"] = info["license"]
+    return _authorship
+
+
+def _parents(file: Path):
+    parts = f"./{file}".split("/")
+    for i in range(len(parts)):
+        parent = "/".join(parts[: i + 1])
+        yield Path(parent)
 
 
 def _AuthorshipInfo() -> AuthorshipInfo:
