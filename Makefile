@@ -7,6 +7,10 @@
 run:
 	python ./git_authorship/authorship_analyzer.py
 
+.PHONY: test
+test:
+	poetry run pytest
+
 license-check:
 	poetry export --format=requirements.txt --output=requirements.txt
 	poetry run liccheck
