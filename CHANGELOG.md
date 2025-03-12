@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased (TBD)
+## 0.4.0 (2025-03-12)
 
 With this release, `git-authorship` once again has all the features it had in version `0.0.0`, but now much more usable and maintainable.
 
