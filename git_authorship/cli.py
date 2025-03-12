@@ -55,13 +55,13 @@ def parse_args(argv=None) -> Args:
         "--author-licenses",
         nargs="?",
         default=None,
-        help="The path to a CSV file containing author licenses",
+        help="The path to a CSV file containing author licenses (Columns: author,license)",
     )
     parser.add_argument(
         "--pseudonyms",
         nargs="?",
         default=None,
-        help="The path to a CSV file containing pseudonyms",
+        help="The path to a CSV file containing pseudonyms (Columns: path,author,license)",
     )
     parser.add_argument(
         "--no-cache",
