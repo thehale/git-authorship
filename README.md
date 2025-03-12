@@ -71,25 +71,26 @@ Then tell the CLI about the authorship file
 git-authorship REPO_URL --author-licenses licensing.csv
 ```
 
-<!-- 
-
-
 ### Pseudonyms
 If certain files are being attributed to an unexpected author (e.g. if a
 contributor copied code from another project, the `blame` would show the
 contributor instead of the original author), you can manually override the
-`blame` and licensing information using the `config/pseudonyms.txt` file. Use
-one line per override in the following format:
+`blame` and licensing information.
 
+_pseudonyms.csv_
 ```
-target-path|actual-author|actual-email|license-SPDX-id
+target-path,actual-author,license-SPDX-id
 ```
+<sub>A list of SPDX license identifiers can be found at [spdx.org/licenses](https://spdx.org/licenses)</sub>
 
-All files with a file path containing `target-path` as a substring will be
-attributed to the named `actual-author` under the named software license.
+> [!NOTE] `target-path` can refer to either a specific file or an entire folder which will be attributed to `actual-author` under the named software license.
 
-_A list of SPDX license identifiers can be found here:
-https://spdx.org/licenses/_ -->
+
+Then tell the CLI about the pseudonyms file
+
+```bash
+git-authorship REPO_URL --pseudonyms pseudonyms.csv
+```
 
 ## License
 Copyright (c) 2022-2024 Joseph Hale, All Rights Reserved
