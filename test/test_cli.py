@@ -15,6 +15,12 @@ def test_default_args():
     assert args.author_licenses is None
     assert args.pseudonyms is None
     assert args.use_cache is True
+    assert args.show_version is False
+
+
+def test_version():
+    args = parse_args(["--version"])
+    assert args.show_version is True
 
 
 def test_location():

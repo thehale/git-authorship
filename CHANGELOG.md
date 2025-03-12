@@ -6,6 +6,7 @@ With this release, `git-authorship` once again has all the features it had in ve
 
 **Features**
   - Restore `--pseudonyms` feature (previously removed in `0.1.0`)
+  - Add `--version` option to CLI
   - Validate config files more strictly (i.e. provide more helpful error messages by failing early)
   - Include descriptions of CSV config columns in CLI `--help` text
   

@@ -4,9 +4,11 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 import argparse
+import importlib.metadata
 import logging
 import shutil
 from dataclasses import dataclass
+from datetime import date
 from pathlib import Path
 from typing import Iterable
 from typing import Optional
@@ -31,10 +33,16 @@ class Args:
     author_licenses: Optional[Path]
     pseudonyms: Optional[Path]
     use_cache: bool = True
+    show_version: bool = False
 
 
 def parse_args(argv=None) -> Args:
     parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--version",
+        action="store_true",
+        help="Show information about this package",
+    )
     parser.add_argument(
         "location", nargs="?", default=".", help="The URL/path to repo to analyze"
     )
@@ -80,6 +88,7 @@ def parse_args(argv=None) -> Args:
             _parse_file_path(args.author_licenses, "--author-licenses"),
             _parse_file_path(args.pseudonyms, "--pseudonyms"),
             not args.no_cache,
+            args.version,
         )
     )
 
@@ -125,19 +134,27 @@ def run(args: Union[Args, Iterable[str]]):
     if isinstance(args, Iterable):
         args = parse_args(args)
 
-    repo = clone_and_checkout(args)
-    licenses = load_licenses_config(args.author_licenses)
-    pseudonyms = load_pseudonyms_config(args.pseudonyms)
-    repo_authorship = authorship.for_repo(
-        repo,
-        licenses=licenses,
-        pseudonyms=pseudonyms,
-        cache_dir=args.output / "cache",
-        use_cache=args.use_cache,
-    )
-    export.as_treemap(repo_authorship, output=args.output / "authorship.html")
-    export.as_json(repo_authorship, output=args.output / "authorship.json")
-    export.as_csv(repo_authorship, output=args.output / "authorship.csv")
+    if args.show_version:
+        lines = [
+            f"git-authorship, version {importlib.metadata.version('git-authorship')}",
+            f"Copyright (c) 2022-{date.today().year}, Joseph Hale (@thehale)",
+            "Licensed under the MPL-2.0",
+        ]
+        print("\n".join(lines))
+    else:
+        repo = clone_and_checkout(args)
+        licenses = load_licenses_config(args.author_licenses)
+        pseudonyms = load_pseudonyms_config(args.pseudonyms)
+        repo_authorship = authorship.for_repo(
+            repo,
+            licenses=licenses,
+            pseudonyms=pseudonyms,
+            cache_dir=args.output / "cache",
+            use_cache=args.use_cache,
+        )
+        export.as_treemap(repo_authorship, output=args.output / "authorship.html")
+        export.as_json(repo_authorship, output=args.output / "authorship.json")
+        export.as_csv(repo_authorship, output=args.output / "authorship.csv")
 
 
 def main(argv=None):
