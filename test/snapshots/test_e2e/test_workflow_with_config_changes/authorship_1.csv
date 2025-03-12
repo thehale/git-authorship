@@ -1,0 +1,5 @@
+path,author,lines,license
+.,Alice <alice@example.com>,1,MIT
+.,Bob <bob@example.com>,1,
+greeting.txt,Alice <alice@example.com>,1,MIT
+greeting.txt,Bob <bob@example.com>,1,

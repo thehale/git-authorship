@@ -65,15 +65,16 @@ def for_repo(
 
     if use_cache and cache_key.exists():
         with open(cache_key, "r") as f:
-            return {Path(k): v for k, v in (json.load(f) or {}).items()}
+            data = {Path(k): v for k, v in (json.load(f) or {}).items()}
     else:
         data = _compute_repo_authorship(repo)
-        data = _augment_author_licenses(data, licenses)
-        data = _augment_pseudonyms(data, pseudonyms)
-        data = _augment_folder_authorships(data)
         cache_key.parent.mkdir(exist_ok=True, parents=True)
         export.as_json(data, cache_key)
-        return data
+
+    data = _augment_author_licenses(data, licenses)
+    data = _augment_pseudonyms(data, pseudonyms)
+    data = _augment_folder_authorships(data)
+    return data
 
 
 def for_file(repo: Repo, path: Path) -> Authorship:
