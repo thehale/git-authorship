@@ -16,6 +16,11 @@ LineCount = int
 License = str
 
 
+class Config:
+    AuthorLicenses = Dict[Author, License]
+    """Map of 'Author' -> 'SPDX License'"""
+
+
 class AuthorshipInfo(TypedDict):
     lines: LineCount
     license: NotRequired[License]
@@ -24,4 +29,4 @@ class AuthorshipInfo(TypedDict):
 Authorship = Dict[Author, AuthorshipInfo]
 RepoAuthorship = Dict[FilePath, Authorship]
 
-__all__ = ["FilePath", "Author", "LineCount", "Authorship", "RepoAuthorship"]
+__all__ = ["FilePath", "Author", "LineCount", "Config", "Authorship", "RepoAuthorship"]

@@ -16,6 +16,7 @@ from git import Repo
 
 from git_authorship import authorship
 from git_authorship import export
+from git_authorship.config import load_licenses_config
 
 log = logging.getLogger(__name__)
 
@@ -116,9 +117,10 @@ def run(args: Union[Args, Iterable[str]]):
         args = parse_args(args)
 
     repo = clone_and_checkout(args)
+    licenses = load_licenses_config(args.author_licenses)
     repo_authorship = authorship.for_repo(
         repo,
-        license_file=args.author_licenses,
+        licenses=licenses,
         cache_dir=args.output / "cache",
         use_cache=args.use_cache,
     )

@@ -3,20 +3,19 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
-import csv
 import json
 import logging
 from collections import defaultdict
 from pathlib import Path
-from typing import Optional
 
 from git import Repo
 
+from . import export
 from ._pathutils import iterfiles
 from ._types import Authorship
 from ._types import AuthorshipInfo
+from ._types import Config
 from ._types import RepoAuthorship
-from git_authorship import export
 
 EXCLUDE_DIRS = [".git"]
 
@@ -26,7 +25,7 @@ log = logging.getLogger(__name__)
 def for_repo(
     repo: Repo,
     *,
-    license_file: Optional[Path] = None,
+    licenses: Config.AuthorLicenses = {},
     cache_dir: Path = Path("build/cache"),
     use_cache: bool = True,
 ) -> RepoAuthorship:
@@ -68,7 +67,7 @@ def for_repo(
             return {Path(k): v for k, v in (json.load(f) or {}).items()}
     else:
         data = _compute_repo_authorship(repo)
-        data = _augment_author_licenses(data, license_file)
+        data = _augment_author_licenses(data, licenses)
         cache_key.parent.mkdir(exist_ok=True, parents=True)
         export.as_json(data, cache_key)
         return data
@@ -134,17 +133,12 @@ def _compute_repo_authorship(repo: Repo) -> RepoAuthorship:
 
 
 def _augment_author_licenses(
-    repo_authorship: RepoAuthorship, licenses_path: Optional[Path] = None
+    repo_authorship: RepoAuthorship, licenses: Config.AuthorLicenses
 ) -> RepoAuthorship:
-    if licenses_path:
-        with open(licenses_path, "r") as f:
-            reader = csv.reader(f)
-            licenses = {row[0]: row[1] for row in reader}
-
-        for path, authorship in repo_authorship.items():
-            for author in authorship.keys():
-                if author in licenses:
-                    repo_authorship[path][author]["license"] = licenses[author]
+    for path, authorship in repo_authorship.items():
+        for author in authorship.keys():
+            if author in licenses:
+                repo_authorship[path][author]["license"] = licenses[author]
 
     return repo_authorship
 
