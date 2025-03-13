@@ -83,7 +83,8 @@ target-path,actual-author,license-SPDX-id
 ```
 <sub>A list of SPDX license identifiers can be found at [spdx.org/licenses](https://spdx.org/licenses)</sub>
 
-> [!NOTE] `target-path` can refer to either a specific file or an entire folder which will be attributed to `actual-author` under the named software license.
+> [!NOTE]
+> `target-path` can refer to either a specific file or an entire folder which will be attributed to `actual-author` under the named software license.
 
 
 Then tell the CLI about the pseudonyms file
