@@ -29,6 +29,7 @@ def for_repo(
     licenses: Optional[Config.AuthorLicenses] = None,
     pseudonyms: Optional[Config.Pseudonyms] = None,
     ignore_extensions: Optional[Config.IgnoreExtensions] = None,
+    ignore_revs_file: str = ".git-blame-ignore-revs",
     cache_dir: Path = Path("build/cache"),
     use_cache: bool = True,
 ) -> RepoAuthorship:
@@ -69,7 +70,7 @@ def for_repo(
         with open(cache_key, "r") as f:
             data = {Path(k): v for k, v in (json.load(f) or {}).items()}
     else:
-        data = _compute_repo_authorship(repo)
+        data = _compute_repo_authorship(repo, ignore_revs_file=ignore_revs_file)
         cache_key.parent.mkdir(exist_ok=True, parents=True)
         export.as_json(data, cache_key)
 
@@ -80,7 +81,9 @@ def for_repo(
     return data
 
 
-def for_file(repo: Repo, path: Path) -> Authorship:
+def for_file(
+    repo: Repo, path: Path, *, ignore_revs_file: str = ".git-blame-ignore-revs"
+) -> Authorship:
     """
     Calculates how many lines each author has contributed to a file
 
@@ -104,7 +107,14 @@ def for_file(repo: Repo, path: Path) -> Authorship:
     """
     log.info(f"Blaming {path}")
     try:
-        raw_blame = repo.blame("HEAD", str(path), rev_opts=["-M", "-C", "-C", "-C"])
+        revs_file_args = (
+            ["--ignore-revs-file", ignore_revs_file]
+            if (Path(repo.working_dir) / ignore_revs_file).is_file()
+            else []
+        )
+        raw_blame = repo.blame(
+            "HEAD", str(path), rev_opts=["-M", "-C", "-C", "-C", *revs_file_args]
+        )
         blame = [
             (f"{commit.author.name} <{commit.author.email}>", len(lines))
             for commit, lines in (raw_blame or [])
@@ -120,13 +130,18 @@ def for_file(repo: Repo, path: Path) -> Authorship:
     return authorship
 
 
-def _compute_repo_authorship(repo: Repo) -> RepoAuthorship:
+def _compute_repo_authorship(
+    repo: Repo, *, ignore_revs_file: str = ".git-blame-ignore-revs"
+) -> RepoAuthorship:
     root = Path(repo.working_dir)
     filepaths = [
         Path(str(f)[len(str(root)) + 1 :])
         for f in iterfiles(root, exclude=[root / d for d in EXCLUDE_DIRS])
     ]
-    repo_authorship = {path: for_file(repo, path) for path in filepaths}
+    repo_authorship = {
+        path: for_file(repo, path, ignore_revs_file=ignore_revs_file)
+        for path in filepaths
+    }
     return repo_authorship
 
 

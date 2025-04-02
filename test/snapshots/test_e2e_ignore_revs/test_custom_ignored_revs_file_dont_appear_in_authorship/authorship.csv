@@ -1,0 +1,5 @@
+path,author,lines,license
+.,Alice <alice@example.com>,1,
+.,Susie <Susie@example.com>,1,
+.abnormal-ignore-revs,Susie <Susie@example.com>,1,
+greeting.txt,Alice <alice@example.com>,1,

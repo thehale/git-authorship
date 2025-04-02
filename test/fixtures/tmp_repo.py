@@ -57,4 +57,5 @@ class TemporaryRepository:
 
     def commit(self, message: str, author_name: str, author_email: str):
         author = Actor(author_name, author_email)
-        self._index.commit(message, author=author)
+        commit = self._index.commit(message, author=author)
+        return commit

@@ -16,6 +16,7 @@ def test_default_args():
     assert args.author_licenses is None
     assert args.pseudonyms is None
     assert args.ignore_extensions == DEFAULT_IGNORE_EXTENSIONS
+    assert args.ignore_revs_file == ".git-blame-ignore-revs"
     assert args.use_cache is True
     assert args.show_version is False
 
@@ -88,3 +89,8 @@ def test_pseudonyms_rejects_folder_path():
 def test_pseudonyms_existing_path():
     args = parse_args(["--pseudonyms", "test/fixtures/pseudonyms.csv"])
     assert args.pseudonyms == Path("test/fixtures/pseudonyms.csv")
+
+
+def test_ignore_revs():
+    args = parse_args(["--ignore-revs-file", ".other-ignore-revs-file"])
+    assert args.ignore_revs_file == ".other-ignore-revs-file"

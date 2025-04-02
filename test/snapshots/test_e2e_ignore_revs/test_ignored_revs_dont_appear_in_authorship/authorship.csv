@@ -1,0 +1,5 @@
+path,author,lines,license
+.,Susie <Susie@example.com>,1,
+.,Alice <alice@example.com>,1,
+.git-blame-ignore-revs,Susie <Susie@example.com>,1,
+greeting.txt,Alice <alice@example.com>,1,

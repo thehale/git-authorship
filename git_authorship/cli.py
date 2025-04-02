@@ -52,6 +52,7 @@ class Args:
     ignore_extensions: Iterable[str] = field(
         default_factory=lambda: DEFAULT_IGNORE_EXTENSIONS
     )
+    ignore_revs_file: str = ".git-blame-ignore-revs"
 
 
 def parse_args(argv=None) -> Args:
@@ -90,6 +91,12 @@ def parse_args(argv=None) -> Args:
         help="The path to a CSV file containing pseudonyms (Columns: path,author,license)",
     )
     parser.add_argument(
+        "--ignore-revs-file",
+        nargs="?",
+        default=".git-blame-ignore-revs",
+        help="The path to a file containing revisions to ignore",
+    )
+    parser.add_argument(
         "--no-cache",
         action="store_true",
         help="Recompute from scratch, including a re-clone.",
@@ -99,14 +106,15 @@ def parse_args(argv=None) -> Args:
 
     return _assert_valid_args(
         Args(
-            args.location,
-            Path(args.clone_to),
-            Path(args.output),
-            args.branch,
-            _parse_file_path(args.author_licenses, "--author-licenses"),
-            _parse_file_path(args.pseudonyms, "--pseudonyms"),
-            not args.no_cache,
-            args.version,
+            location=args.location,
+            clone_to=Path(args.clone_to),
+            output=Path(args.output),
+            branch=args.branch,
+            author_licenses=_parse_file_path(args.author_licenses, "--author-licenses"),
+            pseudonyms=_parse_file_path(args.pseudonyms, "--pseudonyms"),
+            ignore_revs_file=args.ignore_revs_file,
+            use_cache=not args.no_cache,
+            show_version=args.version,
         )
     )
 
@@ -167,6 +175,7 @@ def run(args: Union[Args, Iterable[str]]):
             repo,
             licenses=licenses,
             pseudonyms=pseudonyms,
+            ignore_revs_file=args.ignore_revs_file,
             ignore_extensions=args.ignore_extensions,
             cache_dir=args.output / "cache",
             use_cache=args.use_cache,
