@@ -6,6 +6,7 @@
   - Common picture formats (`.png`, `.gif`, `.jpg`, and `.jpeg`) are omitted from authorship reports.
   - `.git-blame-ignore-revs`, if present, is automatically considered when computing `git blame`
   - Add `--ignore-revs-file` option to CLI to specify alternate ignore revs file location.
+  - Ensured consideration of a top-level `.mailmap` when computing authorship.
 
 ## 0.4.0 (2025-03-12)
 
