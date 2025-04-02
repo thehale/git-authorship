@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.5.1 (2025-04-01)
 
 **Documentation**
   - Update README with instructions for using mailmaps
