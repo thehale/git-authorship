@@ -5,6 +5,7 @@
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 from pathlib import Path
 from typing import Dict
+from typing import Iterable
 from typing import TypedDict
 
 from typing_extensions import NotRequired
@@ -26,6 +27,7 @@ class Config:
     """Map of 'Author' -> 'SPDX License'"""
     Pseudonyms = Dict[Path, _Pseudonym]
     """Map of 'Path' -> 'Pseudonym'"""
+    IgnoreExtensions = Iterable[str]
 
 
 class AuthorshipInfo(TypedDict):

@@ -7,6 +7,7 @@ import json
 import logging
 from collections import defaultdict
 from pathlib import Path
+from typing import Optional
 
 from git import Repo
 
@@ -25,8 +26,9 @@ log = logging.getLogger(__name__)
 def for_repo(
     repo: Repo,
     *,
-    licenses: Config.AuthorLicenses = {},
-    pseudonyms: Config.Pseudonyms = {},
+    licenses: Optional[Config.AuthorLicenses] = None,
+    pseudonyms: Optional[Config.Pseudonyms] = None,
+    ignore_extensions: Optional[Config.IgnoreExtensions] = None,
     cache_dir: Path = Path("build/cache"),
     use_cache: bool = True,
 ) -> RepoAuthorship:
@@ -71,8 +73,9 @@ def for_repo(
         cache_key.parent.mkdir(exist_ok=True, parents=True)
         export.as_json(data, cache_key)
 
-    data = _augment_author_licenses(data, licenses)
-    data = _augment_pseudonyms(data, pseudonyms)
+    data = _augment_ignore_extensions(data, ignore_extensions or [])
+    data = _augment_author_licenses(data, licenses or {})
+    data = _augment_pseudonyms(data, pseudonyms or {})
     data = _augment_folder_authorships(data)
     return data
 
@@ -125,6 +128,16 @@ def _compute_repo_authorship(repo: Repo) -> RepoAuthorship:
     ]
     repo_authorship = {path: for_file(repo, path) for path in filepaths}
     return repo_authorship
+
+
+def _augment_ignore_extensions(
+    repo_authorship: RepoAuthorship, ignore_extensions: Config.IgnoreExtensions
+) -> RepoAuthorship:
+    return {
+        path: authorship
+        for path, authorship in repo_authorship.items()
+        if path.suffix.lower() not in ignore_extensions
+    }
 
 
 def _augment_author_licenses(

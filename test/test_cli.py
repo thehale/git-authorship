@@ -2,6 +2,7 @@ from pathlib import Path
 
 from pytest import raises as assertRaises
 
+from git_authorship.cli import DEFAULT_IGNORE_EXTENSIONS
 from git_authorship.cli import parse_args
 
 
@@ -14,6 +15,7 @@ def test_default_args():
     assert args.branch is None
     assert args.author_licenses is None
     assert args.pseudonyms is None
+    assert args.ignore_extensions == DEFAULT_IGNORE_EXTENSIONS
     assert args.use_cache is True
     assert args.show_version is False
 

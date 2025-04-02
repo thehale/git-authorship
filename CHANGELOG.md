@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+**Features**
+  - Common picture formats (`.png`, `.gif`, `.jpg`, and `.jpeg`) are omitted from authorship reports.
+
 ## 0.4.0 (2025-03-12)
 
 With this release, `git-authorship` once again has all the features it had in version `0.0.0`, but now much more usable and maintainable.

@@ -30,15 +30,19 @@ class TemporaryRepository:
     def branch(self) -> str:
         return self._repo.active_branch.name
 
-    def set_file(self, path: str, content: Union[str, List[str]]):
+    def set_file(self, path: str, content: Union[str, List[str], bytes]):
         """
         Updates a file in the repository to the given content, creating it if necessary.
         """
-        if isinstance(content, list):
-            content = "\n".join(content)
-
-        with open(Path(self.dir) / path, "w") as f:
-            f.write(content)
+        if isinstance(content, bytes):
+            with open(Path(self.dir) / path, "wb") as f:
+                f.write(content)
+        elif isinstance(content, list):
+            with open(Path(self.dir) / path, "w") as f:
+                f.write("\n".join(content))
+        elif isinstance(content, str):
+            with open(Path(self.dir) / path, "w") as f:
+                f.write(content)
 
         self._index.add(path)
 

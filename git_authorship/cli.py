@@ -8,6 +8,7 @@ import importlib.metadata
 import logging
 import shutil
 from dataclasses import dataclass
+from dataclasses import field
 from datetime import date
 from pathlib import Path
 from typing import Iterable
@@ -23,6 +24,8 @@ from git_authorship.config import load_pseudonyms_config
 
 log = logging.getLogger(__name__)
 
+DEFAULT_IGNORE_EXTENSIONS = [".gif", ".png", ".jpg", ".jpeg"]
+
 
 @dataclass
 class Args:
@@ -34,6 +37,9 @@ class Args:
     pseudonyms: Optional[Path]
     use_cache: bool = True
     show_version: bool = False
+    ignore_extensions: Iterable[str] = field(
+        default_factory=lambda: DEFAULT_IGNORE_EXTENSIONS
+    )
 
 
 def parse_args(argv=None) -> Args:
@@ -149,6 +155,7 @@ def run(args: Union[Args, Iterable[str]]):
             repo,
             licenses=licenses,
             pseudonyms=pseudonyms,
+            ignore_extensions=args.ignore_extensions,
             cache_dir=args.output / "cache",
             use_cache=args.use_cache,
         )
