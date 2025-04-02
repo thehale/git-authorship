@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.5.0 (2025-04-01)
+
+Adds multiple features for cleaning up and normalizing authorship reports.
 
 **Features**
   - Common picture formats (`.png`, `.gif`, `.jpg`, and `.jpeg`) are omitted from authorship reports.
