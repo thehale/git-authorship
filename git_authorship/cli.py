@@ -24,7 +24,19 @@ from git_authorship.config import load_pseudonyms_config
 
 log = logging.getLogger(__name__)
 
-DEFAULT_IGNORE_EXTENSIONS = [".gif", ".png", ".jpg", ".jpeg"]
+DEFAULT_IGNORE_EXTENSIONS = [
+    ".doc",
+    ".docx",
+    ".gif",
+    ".jpeg",
+    ".jpg",
+    ".pdf",
+    ".png",
+    ".ppt",
+    ".pptx",
+    ".xls",
+    ".xlsx",
+]
 
 
 @dataclass
