@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+**Documentation**
+  - Update README with instructions for using mailmaps
+  - Update README with instructions for using `.git-blame-ignore-revs`
+  - Clarify path resolution differences for ignore revs vs. author-licenses/pseudonyms
+
 ## 0.5.0 (2025-04-01)
 
 Adds multiple features for cleaning up and normalizing authorship reports.

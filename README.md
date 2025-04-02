@@ -52,6 +52,49 @@ files for labelling the licenses under which contributors have shared their code
 
 ## Other Features
 
+### Mailmaps
+
+When an author changes his/her commit name or email, that author will appear
+multiple times in the authorship report.
+
+To reduce that noise, add [a standard `.mailmap`
+file](https://git-scm.com/docs/git-blame/2.15.4#_mapping_authors) to the root of
+your git repository.
+
+_.mailmap_
+```
+Proper Name <commit@email.xx>
+<proper@email.xx> <commit@email.xx>
+Proper Name <proper@email.xx> <commit@email.xx>
+Proper Name <proper@email.xx> Commit Name <commit@email.xx>
+```
+
+### Ignore Revs
+
+Automated tools (e.g. linters/formatters) which change many lines can lead to
+authorship being attributed to the individual who ran the tool instead of the
+original author.
+
+However, if you identify the formatting commits and list their full commit SHAs
+in a file, Git Authorship can correctly attribute the original author. The
+default file is `.git-blame-ignore-revs`, placed at the root of the repository.
+
+_.git-blame-ignore-revs_
+```
+# Run automated formatter
+9c6927b59791eb71cce0a84d8c88fa14d5235fa8
+
+# Run automated linter
+ba09bf70676fb13891d15236951450b2f1aa9f3b
+```
+
+You can specify an alternate location via the `--ignore-revs-file` option
+(resolved relative to the repository root).
+
+```bash
+git-authorship REPO_URL --ignore-revs-file .nonstandard-ignore-revs-file
+```
+
 ### Author Licenses
 
 You can include OSS licensing information for each author via a `.csv` file. 
@@ -65,7 +108,8 @@ author-name,license-SPDX-id
 
 <sub>A list of SPDX license identifiers can be found at [spdx.org/licenses](https://spdx.org/licenses)</sub>
 
-Then tell the CLI about the authorship file
+Then tell the CLI about the authorship file (resolved relative to your current
+working directory)
 
 ```bash
 git-authorship REPO_URL --author-licenses licensing.csv
@@ -87,7 +131,8 @@ target-path,actual-author,license-SPDX-id
 > `target-path` can refer to either a specific file or an entire folder which will be attributed to `actual-author` under the named software license.
 
 
-Then tell the CLI about the pseudonyms file
+Then tell the CLI about the pseudonyms file (resolved relative to your current
+working directory)
 
 ```bash
 git-authorship REPO_URL --pseudonyms pseudonyms.csv
